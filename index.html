@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="hu">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VR Szoba — Virtuális valóság élmény Budapesten</title>
+  <meta name="description" content="VR szoba és élményközpont: csapatoknak, bulikhoz, csapatépítésre. Foglalj időpontot online!" />
+  <meta name="color-scheme" content="light dark">
+  <meta property="og:title" content="VR Szoba — Virtuális valóság élmény" />
+  <meta property="og:description" content="Csúcsminőségű VR-élmény többjátékos módokkal. Budapest belvárosában." />
+  <meta property="og:type" content="website" />
+  <style>
+    /* ---- Alap téma / reset ---- */
+    :root{
+      --bg: #0b0b10;         /* háttér */
+      --surface: #11131a;    /* kártyák */
+      --text: #f2f4f8;       /* fő szöveg */
+      --muted: #a6adc8;      /* halvány szöveg */
+      --brand: #4e8cff;      /* márkaszín */
+      --brand-ink: #0a1e44;  /* kontraszt */
+      --ring: rgba(78,140,255,.45);
+      --border: color-mix(in srgb, var(--text), transparent 86%);
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg: #f6f7fb;
+        --surface: #ffffff;
+        --text: #0d1220;
+        --muted: #5b6680;
+        --brand: #2e6bff;
+        --brand-ink: #eaf1ff;
+        --ring: rgba(46,107,255,.35);
+        --border: color-mix(in srgb, var(--text), transparent 88%);
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
+      background: radial-gradient(1200px 600px at 20% -10%, var(--brand-ink), transparent 55%), linear-gradient(180deg, var(--bg), #0d0f17);
+      color:var(--text); line-height:1.6;
+    }
+    .container{width:min(1120px,92%); margin-inline:auto}
+    a{color:inherit}
+    img{max-width:100%; display:block}
+
+    /* ---- Fejléc / navigáció ---- */
+    .skip{position:absolute;left:-9999px;top:auto;height:1px;width:1px;overflow:hidden}
+    .skip:focus{position:static;height:auto;width:auto;padding:.5rem 1rem;background:var(--brand);color:#fff;border-radius:.5rem}
+
+    header{
+      position:sticky; top:0; z-index:100; backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg), transparent 70%);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
+    .brand{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;font-weight:800}
+    .brand-logo{width:28px;height:28px;border-radius:.6rem;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--brand),#7aa7ff)}
+    .menu{display:flex;align-items:center;gap:1rem}
+    .menu a{opacity:.9;text-decoration:none}
+    .menu a:hover{opacity:1}
+    .nav-toggle{display:none;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:.6rem;padding:.35rem .55rem}
+
+    /* ---- Gombok ---- */
+    .btn{display:inline-block;padding:.75rem 1rem;border-radius:.9rem;border:1px solid var(--border);text-decoration:none;font-weight:700;box-shadow:var(--shadow)}
+    .btn-primary{background:var(--brand);color:#fff;border-color:transparent}
+    .btn-ghost{background:transparent;color:var(--text)}
+
+    /* ---- Szekciók ---- */
+    .section{padding:clamp(2.5rem,6vw,4rem) 0}
+    .section.alt{background:linear-gradient(180deg, color-mix(in srgb, var(--surface), transparent 20%), transparent)}
+    .grid{display:grid;gap:1rem}
+    .card{background:var(--surface);border:1px solid var(--border);border-radius:1rem;padding:1rem;box-shadow:var(--shadow)}
+
+    /* ---- Hero ---- */
+    .hero{padding: clamp(3rem,8vw,6rem) 0}
+    .hero h1{font-size:clamp(2rem,3.6vw,3rem);line-height:1.15;margin:0 0 .7rem}
+    .hero p{margin:0 0 1.2rem;color:var(--muted);max-width:60ch}
+    .badge{display:inline-flex;align-items:center;gap:.4rem;border:1px solid color-mix(in srgb, var(--brand), transparent 55%);color:color-mix(in srgb, var(--brand), white 25%);padding:.25rem .6rem;border-radius:999px;font-size:.8rem}
+
+    /* Rácsok */
+    .features{grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))}
+    .pricing{grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))}
+
+    /* Form / input */
+    .form{display:grid;gap:1rem;max-width:620px}
+    .field{display:grid;gap:.35rem}
+    input,textarea{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:.7rem;padding:.7rem .8rem;font:inherit;outline:none}
+    input:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 .25rem var(--ring)}
+    .error{color:#ff6b6b;min-height:1em}
+    .status{margin-top:.6rem;color:#8ae6a2}
+
+    /* Galéria helykitöltő */
+    .thumb{aspect-ratio:16/9;border:1px solid var(--border);border-radius:1rem;background:linear-gradient(135deg,rgba(78,140,255,.25),rgba(122,167,255,.15));display:grid;place-items:center;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+
+    /* Lablec */
+    footer{border-top:1px solid var(--border);padding:1.2rem 0;text-align:center;color:var(--muted)}
+
+    /* Mobil menü */
+    @media (max-width: 820px){
+      .nav-toggle{display:inline-block}
+      .menu{position:absolute;right:.6rem;top:3.2rem;display:none;flex-direction:column;align-items:stretch;gap:.6rem;background:var(--surface);padding:.8rem;border-radius:.8rem;min-width:220px;border:1px solid var(--border);box-shadow:var(--shadow)}
+      .menu.show{display:flex}
+      .menu .btn{ text-align:center }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Ugrás a tartalomra</a>
+  <header>
+    <div class="container nav">
+      <a href="#hero" class="brand" aria-label="VR Szoba logó">
+        <span class="brand-logo" aria-hidden="true">
+          <!-- egyszerű inline logó -->
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e6f0ff"/></linearGradient></defs>
+            <rect x="0" y="0" width="16" height="16" rx="4" fill="url(#g)" opacity=".35"/>
+            <path d="M3 11 L8 3 L13 11 Z" fill="#ffffff"/>
+          </svg>
+        </span>
+        <span>VR&nbsp;Szoba</span>
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Menü">☰</button>
+      <nav id="site-menu" class="menu" aria-label="Főmenü">
+        <a href="#features">Szolgáltatások</a>
+        <a href="#pricing">Árak</a>
+        <a href="#gallery">Galéria</a>
+        <a href="#contact">Kapcsolat</a>
+        <a class="btn btn-primary" href="#booking">Foglalás</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section id="hero" class="hero">
+      <div class="container">
+        <span class="badge">Új: Party csomag</span>
+        <h1>VR Szoba Budapesten — csapatoknak, bulikhoz, élménynek</h1>
+        <p>Merülj el a virtuális valóságban csúcsminőségű headsetekkel és többjátékos élményekkel. Ideális baráti programnak, születésnapra, csapatépítésre vagy randihoz.</p>
+        <div class="actions" style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem">
+          <a class="btn btn-primary" href="#booking">Foglalok időpontot</a>
+          <a class="btn btn-ghost" href="#features">Mit tudunk?</a>
+        </div>
+        <div style="display:flex;gap:1rem;align-items:center;margin-top:1rem;color:var(--muted);font-size:.95rem">
+          <span>⭐ 4.9 értékelés</span>
+          <span>👥 2–8 fő / alkalom</span>
+          <span>⏱️ 60–180 perc</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="section">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Minden a felejthetetlen VR-élményért</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kényelmes tér, segítőkész személyzet, változatos játékok és csomagok — csak hozzátok a kíváncsiságotokat.</p>
+        <div class="grid features">
+          <article class="card"><h3>Vezetett élmény</h3><p>Játékmester segít a beállításokban és a játék kiválasztásában.</p></article>
+          <article class="card"><h3>Multiplayer & party</h3><p>Játsszatok együtt vagy egymás ellen — ideális szülinapra és csapatépítésre.</p></article>
+          <article class="card"><h3>Higiénia & biztonság</h3><p>Fertőtlenítés minden használat előtt és után, egyedi arcpárnával.</p></article>
+          <article class="card"><h3>Rugalmas foglalás</h3><p>Online időpontkérés, e-mail visszaigazolással és emlékeztetővel.</p></article>
+          <article class="card"><h3>Ajándékkártya</h3><p>Lepd meg szeretteidet VR utalvánnyal egyedi üzenettel.</p></article>
+          <article class="card"><h3>Központi elhelyezkedés</h3><p>Könnyen megközelíthető helyszín tömegközlekedéssel is.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="section alt">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Egyszerű csomagok, tiszta árak</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Foglalj online, vagy kérj egyedi ajánlatot csapatépítéshez, szülinaphoz.</p>
+        <div class="grid pricing">
+          <article class="card">
+            <h3>Alap</h3>
+            <p style="font-weight:800;font-size:1.1rem;margin:.25rem 0 .5rem">7 990 Ft / fő / óra</p>
+            <ul style="margin:0 0 .8rem 1.1rem">
+              <li>1 VR állomás</li>
+              <li>Játékmester támogatás</li>
+              <li>Alap játékválaszték</li>
+            </ul>
+            <a class="btn btn-primary" href="#booking">Foglalok</a>
+          </article>
+          <article class="card" style="position:relative;outline:2px solid var(--brand)">
+            <span style="position:absolute;left:50%;transform:translateX(-50%);top:-.8rem;background:var(--brand);color:#fff;border-radius:999px;padding:.15rem .6rem;font-size:.75rem;font-weight:700">Legnépszerűbb</span>
+            <h3>Csapat</h3>
+            <p style="font-weight:800;font-size:1.1rem;margin:.25rem 0 .5rem">14 900 Ft / fő / 2 óra</p>
+            <ul style="margin:0 0 .8rem 1.1rem">
+              <li>2 VR állomás</li>
+              <li>Multiplayer módok</li>
+              <li>Fotó/videó készítés</li>
+            </ul>
+            <a class="btn btn-primary" href="#booking">Foglalok</a>
+          </article>
+          <article class="card">
+            <h3>Party</h3>
+            <p style="font-weight:800;font-size:1.1rem;margin:.25rem 0 .5rem">Egyedi ajánlat (3 óra)</p>
+            <ul style="margin:0 0 .8rem 1.1rem">
+              <li>Zártkörű időpont</li>
+              <li>Snack + üdítő opció</li>
+              <li>Személyre szabott program</li>
+            </ul>
+            <a class="btn btn-primary" href="#booking">Ajánlatot kérek</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking / Contact -->
+    <section id="booking" class="section">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+          <form id="contact-form" class="card form" novalidate>
+            <div class="field">
+              <label for="name">Név</label>
+              <input id="name" name="name" type="text" required placeholder="Teljes neved" />
+              <small class="error" aria-live="polite"></small>
+            </div>
+            <div class="field">
+              <label for="email">E-mail</label>
+              <input id="email" name="email" type="email" required placeholder="te@pelda.hu" />
+              <small class="error" aria-live="polite"></small>
+            </div>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:.75rem">
+              <div class="field">
+                <label for="date">Dátum</label>
+                <input id="date" name="date" type="date" required />
+                <small class="error"></small>
+              </div>
+              <div class="field">
+                <label for="time">Idő</label>
+                <input id="time" name="time" type="time" required />
+                <small class="error"></small>
+              </div>
+              <div class="field">
+                <label for="people">Létszám</label>
+                <input id="people" name="people" type="number" min="1" max="12" value="4" />
+                <small class="error"></small>
+              </div>
+            </div>
+            <div class="field">
+              <label for="message">Megjegyzés</label>
+              <textarea id="message" name="message" rows="4" placeholder="Szülinap, csapatépítés, kedvenc játékok…"></textarea>
+              <small class="error"></small>
+            </div>
+            <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
+            <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e‑mailben.</p>
+          </form>
+
+          <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
+            <h3 style="color:var(--text);margin:0">Hasznos tudnivalók</h3>
+            <ul style="margin:0 0 .2rem 1.1rem">
+              <li>Érkezzetek 10 perccel előbb a rövid eligazítás miatt.</li>
+              <li>Kényelmes ruházat ajánlott. Szemüveggel is használható.</li>
+              <li>14 éves kor alatt kísérő szükséges.</li>
+              <li>Lemondás: 24 órával előre díjmentes.</li>
+            </ul>
+            <div style="display:grid;gap:.35rem;font-size:.95rem">
+              <div>📞 <a href="tel:+3612345678">+36 1 234 5678</a></div>
+              <div>✉️ <a href="mailto:hello@vrszoba.hu">hello@vrszoba.hu</a></div>
+              <div>📍 1067 Budapest, Példa utca 12.</div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galéria -->
+    <section id="gallery" class="section alt">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Hangulatképek</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Pillanatok a VR szobából — mosoly, izgalom, és sok-sok nevetés.</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <div class="thumb">Kép #1</div>
+          <div class="thumb">Kép #2</div>
+          <div class="thumb">Kép #3</div>
+          <div class="thumb">Kép #4</div>
+          <div class="thumb">Kép #5</div>
+          <div class="thumb">Kép #6</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Helyszín & nyitvatartás -->
+    <section id="contact" class="section">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Könnyen megtalálsz</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Budapest, VI. kerület — Oktogon közelében (példa). Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+          <div class="card">
+            <h3>Helyszín</h3>
+            <p>1067 Budapest, Példa utca 12.</p>
+            <p><a class="btn btn-ghost" href="https://maps.google.com/?q=Budapest%201067%20Pelda%20utca%2012" target="_blank" rel="noreferrer">Útvonaltervezés megnyitása</a></p>
+          </div>
+          <div class="card">
+            <h3>Nyitvatartás</h3>
+            <div style="display:grid;grid-template-columns:1fr auto;gap:.4rem;color:var(--muted)">
+              <span>H–Cs</span><span>14:00 – 21:00</span>
+              <span>P</span><span>14:00 – 23:00</span>
+              <span>Szo</span><span>10:00 – 23:00</span>
+              <span>V</span><span>10:00 – 20:00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© <span id="year"></span> VR Szoba — Minden jog fenntartva.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobil menü kapcsoló
+    const navToggle = document.querySelector('.nav-toggle');
+    const siteMenu = document.querySelector('#site-menu');
+    if (navToggle && siteMenu){
+      navToggle.addEventListener('click', () => {
+        const open = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', String(!open));
+        siteMenu.classList.toggle('show');
+      });
+    }
+
+    // Belső hivatkozások smooth scrollja
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el){
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        siteMenu?.classList.remove('show');
+        navToggle?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Kapcsolati űrlap ellenőrzés + visszajelzés
+    const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('form-status');
+    if (form){
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let ok = true;
+        const fields = ['name','email','date','time'];
+        fields.forEach(id => {
+          const input = document.getElementById(id);
+          const err = input.nextElementSibling;
+          if (!input.value.trim()){
+            err.textContent = 'Kérlek töltsd ki ezt a mezőt.'; ok = false;
+          } else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)){
+            err.textContent = 'Adj meg érvényes e‑mail címet.'; ok = false;
+          } else { err.textContent = ''; }
+        });
+        if (ok){
+          statusEl.hidden = false; form.reset(); setTimeout(()=> statusEl.hidden = true, 4000);
+        }
+      });
+    }
+
+    // Év a láblécben
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <!-- Strukturált adatok a jobb megjelenéshez (Google) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "EntertainmentBusiness",
+    "name": "VR Szoba",
+    "address": {"@type":"PostalAddress","streetAddress":"Példa utca 12.","addressLocality":"Budapest","postalCode":"1067","addressCountry":"HU"},
+    "telephone": "+36 1 234 5678",
+    "sameAs": [],
+    "openingHoursSpecification": [
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday"],"opens":"14:00","closes":"21:00"},
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Friday"],"opens":"14:00","closes":"23:00"},
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"10:00","closes":"23:00"},
+      {"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday"],"opens":"10:00","closes":"20:00"}
+    ]
+  }
+  </script>
+
+  <noscript>A weboldal bizonyos funkciói JavaScriptet igényelnek.</noscript>
+</body>
+</html>
