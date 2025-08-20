@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VR Szoba — Virtuális valóság élmény Budapesten</title>
-  <meta name="description" content="VR szoba és élményközpont: csapatoknak, bulikhoz, csapatépítésre. Foglalj időpontot online!" />
+  <title>VR Szoba — Virtuális valóság élmény Kecskeméten</title>
+  <meta name="description" content="VR szoba és élményközpont Kecskeméten: csapatoknak, bulikhoz, csapatépítésre. Foglalj időpontot online!" />
   <meta name="color-scheme" content="light dark">
-  <meta property="og:title" content="VR Szoba — Virtuális valóság élmény" />
-  <meta property="og:description" content="Csúcsminőségű VR-élmény többjátékos módokkal. Budapest belvárosában." />
+  <meta property="og:title" content="VR Szoba — Virtuális valóság élmény Kecskeméten" />
+  <meta property="og:description" content="Csúcsminőségű VR-élmény többjátékos módokkal. Kecskemét belvárosában." />
   <meta property="og:type" content="website" />
   <style>
     /* ---- Alap téma / reset ---- */
@@ -91,8 +91,8 @@
     .error{color:#ff6b6b;min-height:1em}
     .status{margin-top:.6rem;color:#8ae6a2}
 
-    /* Galéria helykitöltő */
-    .thumb{aspect-ratio:16/9;border:1px solid var(--border);border-radius:1rem;background:linear-gradient(135deg,rgba(78,140,255,.25),rgba(122,167,255,.15));display:grid;place-items:center;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+    /* Galéria képek */
+    .thumb-img{aspect-ratio:16/9; width:100%; height:auto; border:1px solid var(--border); border-radius:1rem; object-fit:cover; background:#0d0f17}
 
     /* Lablec */
     footer{border-top:1px solid var(--border);padding:1.2rem 0;text-align:center;color:var(--muted)}
@@ -137,7 +137,7 @@
     <section id="hero" class="hero">
       <div class="container">
         <span class="badge">Új: Party csomag</span>
-        <h1>VR Szoba Budapesten — csapatoknak, bulikhoz, élménynek</h1>
+        <h1>VR Szoba Kecskeméten — csapatoknak, bulikhoz, élménynek</h1>
         <p>Merülj el a virtuális valóságban csúcsminőségű headsetekkel és többjátékos élményekkel. Ideális baráti programnak, születésnapra, csapatépítésre vagy randihoz.</p>
         <div class="actions" style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem">
           <a class="btn btn-primary" href="#booking">Foglalok időpontot</a>
@@ -262,7 +262,7 @@
             <div style="display:grid;gap:.35rem;font-size:.95rem">
               <div>📞 <a href="tel:+3612345678">+36 1 234 5678</a></div>
               <div>✉️ <a href="mailto:hello@vrszoba.hu">hello@vrszoba.hu</a></div>
-              <div>📍 1067 Budapest, Példa utca 12.</div>
+              <div>📍 6000 Kecskemét, Példa utca 12.</div>
             </div>
           </aside>
         </div>
@@ -274,13 +274,17 @@
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Hangulatképek</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Pillanatok a VR szobából — mosoly, izgalom, és sok-sok nevetés.</p>
+        <!--
+          Tedd a képeidet a repo gyökerébe létrehozott img/ mappába (pl. img/vr1.jpg ...),
+          és nevezd át az elérési utakat lent. A relatív elérési út (img/...) fontos GitHub Pages-hez!
+        -->
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-          <div class="thumb">Kép #1</div>
-          <div class="thumb">Kép #2</div>
-          <div class="thumb">Kép #3</div>
-          <div class="thumb">Kép #4</div>
-          <div class="thumb">Kép #5</div>
-          <div class="thumb">Kép #6</div>
+          <img class="thumb-img" src="img/vr1.jpg" alt="VR élmény – játék közben 1" loading="lazy">
+          <img class="thumb-img" src="img/vr2.jpg" alt="VR élmény – játék közben 2" loading="lazy">
+          <img class="thumb-img" src="img/vr3.jpg" alt="VR élmény – csapatjáték" loading="lazy">
+          <img class="thumb-img" src="img/vr4.jpg" alt="VR felszerelés" loading="lazy">
+          <img class="thumb-img" src="img/vr5.jpg" alt="VR szoba hangulat" loading="lazy">
+          <img class="thumb-img" src="img/vr6.jpg" alt="Multiplayer móka" loading="lazy">
         </div>
       </div>
     </section>
@@ -289,12 +293,12 @@
     <section id="contact" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Könnyen megtalálsz</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Budapest, VI. kerület — Oktogon közelében (példa). Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kecskemét belvárosában (példa). Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
           <div class="card">
             <h3>Helyszín</h3>
-            <p>1067 Budapest, Példa utca 12.</p>
-            <p><a class="btn btn-ghost" href="https://maps.google.com/?q=Budapest%201067%20Pelda%20utca%2012" target="_blank" rel="noreferrer">Útvonaltervezés megnyitása</a></p>
+            <p>6000 Kecskemét, Példa utca 12.</p>
+            <p><a class="btn btn-ghost" href="https://maps.google.com/?q=Kecskem%C3%A9t%206000%20Pelda%20utca%2012" target="_blank" rel="noreferrer">Útvonaltervezés megnyitása</a></p>
           </div>
           <div class="card">
             <h3>Nyitvatartás</h3>
@@ -375,7 +379,7 @@
     "@context": "https://schema.org",
     "@type": "EntertainmentBusiness",
     "name": "VR Szoba",
-    "address": {"@type":"PostalAddress","streetAddress":"Példa utca 12.","addressLocality":"Budapest","postalCode":"1067","addressCountry":"HU"},
+    "address": {"@type":"PostalAddress","streetAddress":"Példa utca 12.","addressLocality":"Kecskemét","postalCode":"6000","addressCountry":"HU"},
     "telephone": "+36 1 234 5678",
     "sameAs": [],
     "openingHoursSpecification": [
