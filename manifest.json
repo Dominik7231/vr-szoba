@@ -1,0 +1,21 @@
+{
+  "name": "VR Szoba Kecskemét",
+  "short_name": "VR Szoba",
+  "start_url": "/vr-szoba/index.html",
+  "scope": "/vr-szoba/",
+  "display": "standalone",
+  "background_color": "#0b0b10",
+  "theme_color": "#4e8cff",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -9,6 +9,11 @@
   <meta property="og:title" content="VR Szoba — Virtuális valóság élmény Kecskeméten" />
   <meta property="og:description" content="Csúcsminőségű VR-élmény többjátékos módokkal. Kecskemét belvárosában." />
   <meta property="og:type" content="website" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4e8cff">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <meta property="og:image" content="icons/icon-512.png">
+
   <style>
     /* ---- Alap téma / reset ---- */
     :root{
@@ -392,5 +397,14 @@
   </script>
 
   <noscript>A weboldal bizonyos funkciói JavaScriptet igényelnek.</noscript>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js');
+    });
+  }
+  </script>
+
 </body>
 </html>
