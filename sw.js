@@ -1,5 +1,5 @@
 // sw.js — basic offline cache for VR Szoba
-const CACHE = "vr-szoba-v1";
+const CACHE = "vr-szoba-v2";
 const ASSETS = [
   "/vr-szoba/",
   "/vr-szoba/index.html",
