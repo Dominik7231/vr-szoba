@@ -1,19 +1,18 @@
 // sw.js — basic offline cache for VR Szoba
-const CACHE = "vr-szoba-v3";
+const CACHE = "vr-szoba-v4";
 const ASSETS = [
   "/vr-szoba/",
   "/vr-szoba/index.html",
   "/vr-szoba/manifest.json",
   "/vr-szoba/icon-192.png",
   "/vr-szoba/icon-512.png",
-  // ha szeretnéd offline tölteni a galériát, add hozzá ezeket is:
-  "/vr-szoba/vr1.jpg",
-  "/vr-szoba/vr2.jpg",
-  "/vr-szoba/vr3.jpg",
-  "/vr-szoba/vr4.jpg",
-  "/vr-szoba/vr5.jpg",
-  "/vr-szoba/vr6.jpg"
+  // új galéria képek:
+  "/vr-szoba/szoba-led.jpg",
+  "/vr-szoba/szoba-feher.jpg",
+  "/vr-szoba/szoba-fa.jpg",
+  "/vr-szoba/szoba-neon.jpg"
 ];
+
 
 
 self.addEventListener("install", (e) => {
