@@ -1,5 +1,5 @@
 // sw.js — offline cache a VR Szobához
-const CACHE = "vr-szoba-v5"; // <- új verzió
+const CACHE = "vr-szoba-v6"; // <- új verzió
 
 const ASSETS = [
   "/vr-szoba/",
