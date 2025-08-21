@@ -1,5 +1,5 @@
 // sw.js — offline cache a VR Szobához
-const CACHE = "vr-szoba-v5";
+const CACHE = "vr-szoba-v5"; // <- új verzió
 
 const ASSETS = [
   "/vr-szoba/",
@@ -27,30 +27,9 @@ self.addEventListener("activate", (e) => {
   self.clients.claim();
 });
 
-// HTML (navigáció) => network-first, minden más => cache-first
 self.addEventListener("fetch", (e) => {
-  const req = e.request;
-  if (req.mode === "navigate") {
-    e.respondWith(
-      fetch(req)
-        .then(resp => {
-          const copy = resp.clone();
-          caches.open(CACHE).then(c => c.put("/vr-szoba/", copy));
-          return resp;
-        })
-        .catch(() => caches.match("/vr-szoba/"))
-    );
-    return;
-  }
-
-  // statikus fájlok: cache-first
   e.respondWith(
-    caches.match(req).then(r => r ||
-      fetch(req).then(resp => {
-        const copy = resp.clone();
-        caches.open(CACHE).then(c => c.put(req, copy));
-        return resp;
-      })
-    )
+    caches.match(e.request).then(cached => cached || fetch(e.request))
   );
 });
+
