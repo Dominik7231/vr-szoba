@@ -10,14 +10,18 @@
   <meta property="og:title" content="VR Szoba & UV Minigolf — Kecskemét" />
   <meta property="og:description" content="Csúcsminőségű VR-élmény + neon UV minigolf pálya. Foglalj időpontot online!" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="/vr-szoba/szoba-neon.jpg" />
+  <meta property="og:image" content="/vr-szoba/Új%20logo.jpg" />
 
   <!-- PWA / ikonok -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4e8cff">
+
+  <!-- Böngésző ikonok (új logó) -->
+  <link rel="icon" type="image/jpeg" href="Új%20logo.jpg">
+  <!-- fallbackok (ha a PNG-k is megvannak, maradhatnak) -->
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <link rel="apple-touch-icon" href="icon-180.png">
+  <link rel="apple-touch-icon" href="Új%20logo.jpg">
 
   <!-- iOS webapp mód -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -27,20 +31,15 @@
   <style>
     /* ---- Alap téma / reset ---- */
     :root{
-      --bg: #0b0b10;
-      --surface: #11131a;
-      --text: #f2f4f8;
-      --muted: #a6adc8;
-      --brand: #4e8cff;
-      --brand-ink: #0a1e44;
-      --ring: rgba(78,140,255,.45);
+      --bg:#0b0b10; --surface:#11131a; --text:#f2f4f8; --muted:#a6adc8;
+      --brand:#4e8cff; --brand-ink:#0a1e44; --ring:rgba(78,140,255,.45);
       --border: color-mix(in srgb, var(--text), transparent 86%);
       --shadow: 0 10px 30px rgba(0,0,0,.25);
     }
     @media (prefers-color-scheme: light){
       :root{
-        --bg: #f6f7fb; --surface: #ffffff; --text: #0d1220; --muted: #5b6680;
-        --brand: #2e6bff; --brand-ink: #eaf1ff; --ring: rgba(46,107,255,.35);
+        --bg:#f6f7fb; --surface:#ffffff; --text:#0d1220; --muted:#5b6680;
+        --brand:#2e6bff; --brand-ink:#eaf1ff; --ring:rgba(46,107,255,.35);
         --border: color-mix(in srgb, var(--text), transparent 88%);
       }
     }
@@ -66,7 +65,7 @@
     }
     .nav{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
     .brand{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;font-weight:800}
-    .brand-logo{width:28px;height:28px;border-radius:.6rem;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--brand),#7aa7ff)}
+    .brand-logo{width:28px;height:28px;border-radius:.6rem;object-fit:cover;display:block;box-shadow:var(--shadow)}
     .menu{display:flex;align-items:center;gap:1rem}
     .menu a{opacity:.9;text-decoration:none}
     .menu a:hover{opacity:1}
@@ -127,13 +126,7 @@
   <header>
     <div class="container nav">
       <a href="#hero-vr" class="brand" aria-label="VR Szoba és UV Minigolf logó">
-        <span class="brand-logo" aria-hidden="true">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e6f0ff"/></linearGradient></defs>
-            <rect x="0" y="0" width="16" height="16" rx="4" fill="url(#g)" opacity=".35"/>
-            <path d="M3 11 L8 3 L13 11 Z" fill="#ffffff"/>
-          </svg>
-        </span>
+        <img class="brand-logo" src="Új%20logo.jpg" alt="VR Szoba & UV Minigolf logó">
         <span>VR&nbsp;Szoba&nbsp;•&nbsp;UV&nbsp;Minigolf</span>
       </a>
 
@@ -340,7 +333,7 @@
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">UV Minigolf képek</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Neonos pálya, világító akadályok — minden korosztály imádja.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-          <!-- FONTOS: töltsd fel ezeket a fájlokat ilyen neveken: golf-1.jpg, golf-2.jpg, golf-3.jpg -->
+          <!-- Töltsd fel ezeket a fájlokat: golf-1.jpg, golf-2.jpg, golf-3.jpg -->
           <img class="thumb-img" src="golf-1.jpg?v=7" alt="UV minigolf pálya neon vonalakkal" loading="lazy">
           <img class="thumb-img" src="golf-2.jpg?v=7" alt="Minigolf ütés közelről, világító labda" loading="lazy">
           <img class="thumb-img" src="golf-3.jpg?v=7" alt="Lyuk és akadályok lila-zöld fénnyel" loading="lazy">
@@ -352,7 +345,7 @@
     <section id="faq" class="section alt">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Gyakori kérdések</h2>
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
           <article class="card"><h3>Hogyan kapok visszaigazolást?</h3><p>Űrlap után e-mailt küldünk, szükség esetén telefonon egyeztetünk.</p></article>
           <article class="card"><h3>Milyen korosztálynak ajánlott?</h3><p>VR: 12+, UV minigolf: 6+ kísérővel. 14 év alatt kísérő szükséges.</p></article>
           <article class="card"><h3>Mit vegyek fel?</h3><p>Kényelmes ruha, zárt cipő. A minigolfhoz világos ruházat jól mutat a fényekben.</p></article>
@@ -405,9 +398,7 @@
       '#hero-golf .badge', '#hero-golf h2', '#hero-golf p', '#hero-golf .actions',
       '#features .card', '#packages .card',
       '#gallery img', '#gallery-golf img',
-      '#faq .card',
-      '#contact .card',
-      'footer'
+      '#faq .card', '#contact .card', 'footer'
     ].join(',');
 
     const items = Array.from(document.querySelectorAll(sel));
@@ -419,7 +410,7 @@
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('show');
-        else entry.target.classList.remove('show'); // újra-animálható
+        else entry.target.classList.remove('show');
       });
     }, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
 
@@ -505,8 +496,6 @@
   }
   </script>
 
-  <noscript>A weboldal bizonyos funkciói JavaScriptet igényelnek.</noscript>
-
   <!-- Service Worker regisztráció + auto-reload -->
   <script>
   if ('serviceWorker' in navigator) {
@@ -523,3 +512,4 @@
   </script>
 </body>
 </html>
+
