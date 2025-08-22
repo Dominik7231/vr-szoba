@@ -95,7 +95,7 @@
 
     /* Rácsok */
     .features{grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))}
-    .pricing{grid-template-columns: repeat(auto-fit, minmax(240px, 1 fr))}
+    .pricing{grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))}
 
     /* Form / input */
     .form{display:grid;gap:1rem;max-width:620px}
@@ -116,10 +116,14 @@
       opacity:0;
       transform: translateY(24px);
       transition: opacity .6s ease, transform .6s ease;
+      will-change: opacity, transform;
     }
     .reveal.show{
       opacity:1;
       transform:none;
+    }
+    @media (prefers-reduced-motion: reduce){
+      .reveal{transition:none}
     }
 
     /* Mobil menü */
@@ -346,7 +350,7 @@
     </div>
   </footer>
 
-  <!-- Scroll reveal JS -->
+  <!-- Scroll reveal JS (újra-aktiválható) -->
   <script>
   (() => {
     const sel = [
@@ -358,20 +362,23 @@
       'footer'
     ].join(',');
 
-    const items = Array.from(document.querySelectorAll(sel)).filter(Boolean);
+    const items = Array.from(document.querySelectorAll(sel));
     items.forEach((el, i) => {
       el.classList.add('reveal');
       el.style.transitionDelay = (i % 6) * 80 + 'ms';
     });
 
+    // Re-triggerelhető: ha kikerül a viewportból, levesszük a 'show'-t,
+    // amikor visszajön, újra felvesszük -> ismét animál.
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('show');
-          io.unobserve(entry.target);
+        } else {
+          entry.target.classList.remove('show');
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
 
     items.forEach(el => io.observe(el));
   })();
@@ -459,14 +466,12 @@
   <!-- Service Worker regisztráció + auto-reload -->
   <script>
   if ('serviceWorker' in navigator) {
-    // egyszeri újratöltés, amikor új SW veszi át a kontrollt
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
       if (refreshing) return;
       refreshing = true;
       window.location.reload();
     });
-
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/vr-szoba/sw.js');
     });
@@ -474,3 +479,4 @@
   </script>
 </body>
 </html>
+
