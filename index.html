@@ -3,13 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VR Szoba — Virtuális valóság élmény Kecskeméten</title>
-  <meta name="description" content="VR szoba és élményközpont Kecskeméten: csapatoknak, bulikhoz, csapatépítésre. Foglalj időpontot online!" />
+
+  <title>VR & UV Minigolf — Élményközpont Kecskeméten</title>
+  <meta name="description" content="VR élmények és UV (glow) minigolf Kecskeméten. Barátoknak, családoknak, csapatépítéshez. Online foglalás, központi helyszín: Korhánközi u. 10/A." />
   <meta name="color-scheme" content="light dark">
-  <meta property="og:title" content="VR Szoba — Virtuális valóság élmény Kecskeméten" />
-  <meta property="og:description" content="Csúcsminőségű VR-élmény többjátékos módokkal. Kecskemét belvárosában." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="VR & UV Minigolf — Élményközpont Kecskeméten" />
+  <meta property="og:description" content="Virtuális valóság és UV minigolf egy helyen. Foglalj időpontot online!" />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="/vr-szoba/szoba-neon.jpg">
+  <meta property="og:image" content="/vr-szoba/golf-palya.jpg" />
 
   <!-- PWA / ikonok -->
   <link rel="manifest" href="manifest.json">
@@ -20,60 +23,40 @@
 
   <!-- iOS webapp mód -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="VR Szoba">
+  <meta name="apple-mobile-web-app-title" content="VR & UV Minigolf">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
-    /* ---- Alap téma / reset ---- */
+    /* ---- Alap téma ---- */
     :root{
-      --bg: #0b0b10;         /* háttér */
-      --surface: #11131a;    /* kártyák */
-      --text: #f2f4f8;       /* fő szöveg */
-      --muted: #a6adc8;      /* halvány szöveg */
-      --brand: #4e8cff;      /* márkaszín */
-      --brand-ink: #0a1e44;  /* kontraszt */
-      --ring: rgba(78,140,255,.45);
-      --border: color-mix(in srgb, var(--text), transparent 86%);
-      --shadow: 0 10px 30px rgba(0,0,0,.25);
+      --bg:#0b0b10; --surface:#11131a; --text:#f2f4f8; --muted:#a6adc8;
+      --brand:#4e8cff; --brand-ink:#0a1e44; --ring:rgba(78,140,255,.45);
+      --border:color-mix(in srgb, var(--text), transparent 86%);
+      --shadow:0 10px 30px rgba(0,0,0,.25);
     }
     @media (prefers-color-scheme: light){
-      :root{
-        --bg: #f6f7fb;
-        --surface: #ffffff;
-        --text: #0d1220;
-        --muted: #5b6680;
-        --brand: #2e6bff;
-        --brand-ink: #eaf1ff;
-        --ring: rgba(46,107,255,.35);
-        --border: color-mix(in srgb, var(--text), transparent 88%);
-      }
+      :root{ --bg:#f6f7fb; --surface:#fff; --text:#0d1220; --muted:#5b6680; --brand:#2e6bff; --brand-ink:#eaf1ff; --ring:rgba(46,107,255,.35); --border:color-mix(in srgb, var(--text), transparent 88%); }
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{box-sizing:border-box} html,body{height:100%}
     body{
       margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
       background: radial-gradient(1200px 600px at 20% -10%, var(--brand-ink), transparent 55%), linear-gradient(180deg, var(--bg), #0d0f17);
       color:var(--text); line-height:1.6;
     }
     .container{width:min(1120px,92%); margin-inline:auto}
-    a{color:inherit}
-    img{max-width:100%; display:block}
+    a{color:inherit} img{max-width:100%; display:block}
 
-    /* ---- Fejléc / navigáció ---- */
+    /* ---- Fejléc ---- */
     .skip{position:absolute;left:-9999px;top:auto;height:1px;width:1px;overflow:hidden}
     .skip:focus{position:static;height:auto;width:auto;padding:.5rem 1rem;background:var(--brand);color:#fff;border-radius:.5rem}
 
-    header{
-      position:sticky; top:0; z-index:100; backdrop-filter: blur(10px);
-      background: color-mix(in srgb, var(--bg), transparent 70%);
-      border-bottom:1px solid var(--border);
-    }
+    header{ position:sticky; top:0; z-index:100; backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg), transparent 70%); border-bottom:1px solid var(--border); }
     .nav{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
     .brand{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;font-weight:800}
     .brand-logo{width:28px;height:28px;border-radius:.6rem;display:grid;place-items:center;color:#fff;background:linear-gradient(135deg,var(--brand),#7aa7ff)}
     .menu{display:flex;align-items:center;gap:1rem}
-    .menu a{opacity:.9;text-decoration:none}
-    .menu a:hover{opacity:1}
+    .menu a{opacity:.9;text-decoration:none}.menu a:hover{opacity:1}
     .nav-toggle{display:none;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:.6rem;padding:.35rem .55rem}
 
     /* ---- Gombok ---- */
@@ -90,7 +73,7 @@
     /* ---- Hero ---- */
     .hero{padding: clamp(3rem,8vw,6rem) 0}
     .hero h1{font-size:clamp(2rem,3.6vw,3rem);line-height:1.15;margin:0 0 .7rem}
-    .hero p{margin:0 0 1.2rem;color:var(--muted);max-width:60ch}
+    .hero p{margin:0 0 1.2rem;color:var(--muted);max-width:65ch}
     .badge{display:inline-flex;align-items:center;gap:.4rem;border:1px solid color-mix(in srgb, var(--brand), transparent 55%);color:color-mix(in srgb, var(--brand), white 25%);padding:.25rem .6rem;border-radius:999px;font-size:.8rem}
 
     /* Rácsok */
@@ -105,33 +88,20 @@
     .error{color:#ff6b6b;min-height:1em}
     .status{margin-top:.6rem;color:#8ae6a2}
 
-    /* Galéria képek */
+    /* Képek */
     .thumb-img{aspect-ratio:16/9; width:100%; height:auto; border:1px solid var(--border); border-radius:1rem; object-fit:cover; background:#0d0f17}
 
-    /* Lablec */
-    footer{border-top:1px solid var(--border);padding:1.2rem 0;text-align:center;color:var(--muted)}
-
-    /* --- Scroll reveal --- */
-    .reveal{
-      opacity:0;
-      transform: translateY(24px);
-      transition: opacity .6s ease, transform .6s ease;
-      will-change: opacity, transform;
-    }
-    .reveal.show{
-      opacity:1;
-      transform:none;
-    }
-    @media (prefers-reduced-motion: reduce){
-      .reveal{transition:none}
-    }
+    /* Scroll reveal */
+    .reveal{opacity:0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; will-change: opacity, transform;}
+    .reveal.show{opacity:1; transform:none;}
+    @media (prefers-reduced-motion: reduce){ .reveal{transition:none} }
 
     /* Mobil menü */
     @media (max-width: 820px){
       .nav-toggle{display:inline-block}
       .menu{position:absolute;right:.6rem;top:3.2rem;display:none;flex-direction:column;align-items:stretch;gap:.6rem;background:var(--surface);padding:.8rem;border-radius:.8rem;min-width:220px;border:1px solid var(--border);box-shadow:var(--shadow)}
       .menu.show{display:flex}
-      .menu .btn{ text-align:center }
+      .menu .btn{text-align:center}
     }
   </style>
 </head>
@@ -139,20 +109,20 @@
   <a class="skip" href="#main">Ugrás a tartalomra</a>
   <header>
     <div class="container nav">
-      <a href="#hero" class="brand" aria-label="VR Szoba logó">
+      <a href="#hero" class="brand" aria-label="VR & UV Minigolf logó">
         <span class="brand-logo" aria-hidden="true">
-          <!-- egyszerű inline logó -->
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#e6f0ff"/></linearGradient></defs>
             <rect x="0" y="0" width="16" height="16" rx="4" fill="url(#g)" opacity=".35"/>
             <path d="M3 11 L8 3 L13 11 Z" fill="#ffffff"/>
           </svg>
         </span>
-        <span>VR&nbsp;Szoba</span>
+        <span>VR&nbsp;&nbsp;|&nbsp;&nbsp;UV&nbsp;Minigolf</span>
       </a>
       <button class="nav-toggle" aria-expanded="false" aria-controls="site-menu" aria-label="Menü">☰</button>
       <nav id="site-menu" class="menu" aria-label="Főmenü">
         <a href="#features">Szolgáltatások</a>
+        <a href="#minigolf">Minigolf</a>
         <a href="#pricing">Árak</a>
         <a href="#gallery">Galéria</a>
         <a href="#contact">Kapcsolat</a>
@@ -165,9 +135,9 @@
     <!-- Hero -->
     <section id="hero" class="hero">
       <div class="container">
-        <span class="badge">Új: Party csomag</span>
-        <h1>VR Szoba Kecskeméten — csapatoknak, bulikhoz, élménynek</h1>
-        <p>Merülj el a virtuális valóságban csúcsminőségű headsetekkel és többjátékos élményekkel. Ideális baráti programnak, születésnapra, csapatépítésre vagy randihoz.</p>
+        <span class="badge">Új: UV (glow) minigolf pálya!</span>
+        <h1>VR & UV Minigolf Kecskeméten — élmény barátoknak, családnak, csapatoknak</h1>
+        <p>Merülj el a virtuális valóságban **és** guríts a fénylő, UV pályán. Központi helyszín, segítőkész személyzet, rugalmas foglalás.</p>
         <div class="actions" style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem">
           <a class="btn btn-primary" href="#booking">Foglalok időpontot</a>
           <a class="btn btn-ghost" href="#features">Mit tudunk?</a>
@@ -175,61 +145,70 @@
         <div style="display:flex;gap:1rem;align-items:center;margin-top:1rem;color:var(--muted);font-size:.95rem">
           <span>⭐ 4.9 értékelés</span>
           <span>👥 2–8 fő / alkalom</span>
-          <span>⏱️ 60–180 perc</span>
+          <span>📍 Korhánközi u. 10/A</span>
         </div>
       </div>
     </section>
 
-    <!-- Features -->
+    <!-- Szolgáltatások -->
     <section id="features" class="section">
       <div class="container">
-        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Minden a felejthetetlen VR-élményért</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kényelmes tér, segítőkész személyzet, változatos játékok és csomagok — csak hozzátok a kíváncsiságotokat.</p>
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Minden a felejthetetlen élményért</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">VR állomások, UV minigolf, party hangulat — csak hozzátok a kíváncsiságotokat.</p>
         <div class="grid features">
-          <article class="card"><h3>Vezetett élmény</h3><p>Játékmester segít a beállításokban és a játék kiválasztásában.</p></article>
-          <article class="card"><h3>Multiplayer & party</h3><p>Játsszatok együtt vagy egymás ellen — ideális szülinapra és csapatépítésre.</p></article>
-          <article class="card"><h3>Higiénia & biztonság</h3><p>Fertőtlenítés minden használat előtt és után, egyedi arcpárnával.</p></article>
+          <article class="card"><h3>Vezetett VR élmény</h3><p>Játékmester segít a beállításokban és a játék kiválasztásában.</p></article>
+          <article class="card"><h3>Glow minigolf</h3><p>UV világítás, tematikus pályák, fotó-barát látvány.</p></article>
+          <article class="card"><h3>Család & csapat</h3><p>Közös játékélmény kicsiknek és nagyoknak — szülinap, randi, céges buli.</p></article>
+          <article class="card"><h3>Higiénia & biztonság</h3><p>Fertőtlenítés minden használat előtt és után, egyedi VR arcpárnával.</p></article>
           <article class="card"><h3>Rugalmas foglalás</h3><p>Online időpontkérés, e-mail visszaigazolással és emlékeztetővel.</p></article>
-          <article class="card"><h3>Ajándékkártya</h3><p>Lepd meg szeretteidet VR utalvánnyal egyedi üzenettel.</p></article>
-          <article class="card"><h3>Központi elhelyezkedés</h3><p>Könnyen megközelíthető helyszín tömegközlekedéssel is.</p></article>
+          <article class="card"><h3>Központi elhelyezkedés</h3><p>6000 Kecskemét, Korhánközi u. 10/A — egyszerű megközelítés.</p></article>
         </div>
       </div>
     </section>
 
-    <!-- Pricing -->
-    <section id="pricing" class="section alt">
+    <!-- Minigolf blokk -->
+    <section id="minigolf" class="section alt">
       <div class="container">
-        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Egyszerű csomagok, tiszta árak</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Foglalj online, vagy kérj egyedi ajánlatot csapatépítéshez, szülinaphoz.</p>
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">UV (glow) minigolf pálya</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">
+          Neon fények, űr-téma és kanyargó pályák. Tökéletes program barátokkal vagy családdal — fotózz sokat! 📸
+        </p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+          <img class="thumb-img" src="golf-palya.jpg?v=6"   alt="UV minigolf pálya neon kanyarokkal" loading="lazy">
+          <img class="thumb-img" src="golf-kozel1.jpg?v=6"  alt="Minigolf ütő és fénylő labda közelről" loading="lazy">
+          <img class="thumb-img" src="golf-kozel2.jpg?v=6"  alt="Zöld labda a lilán világító lyuknál" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <!-- Árak (ha még alakul, maradjon érdeklődj) -->
+    <section id="pricing" class="section">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Árak</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">VR és minigolf csomagok — kérj ajánlatot a számodra ideális összeállításhoz.</p>
         <div class="grid pricing">
           <article class="card">
-            <h3>Alap</h3>
-            <p style="font-weight:800;font-size:1.1rem;margin:.25rem 0 .5rem">7 990 Ft / fő / óra</p>
+            <h3>VR élmény</h3>
+            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">Foglalható órás blokkokban</p>
             <ul style="margin:0 0 .8rem 1.1rem">
-              <li>1 VR állomás</li>
-              <li>Játékmester támogatás</li>
-              <li>Alap játékválaszték</li>
+              <li>1–2 VR állomás</li><li>Játékmester támogatás</li><li>Többjátékos módok</li>
             </ul>
-            <a class="btn btn-primary" href="#booking">Foglalok</a>
+            <a class="btn btn-primary" href="#booking">Időpontot kérek</a>
           </article>
           <article class="card" style="position:relative;outline:2px solid var(--brand)">
-            <span style="position:absolute;left:50%;transform:translateX(-50%);top:-.8rem;background:var(--brand);color:#fff;border-radius:999px;padding:.15rem .6rem;font-size:.75rem;font-weight:700">Legnépszerűbb</span>
-            <h3>Csapat</h3>
-            <p style="font-weight:800;font-size:1.1rem;margin:.25rem 0 .5rem">14 900 Ft / fő / 2 óra</p>
+            <span style="position:absolute;left:50%;transform:translateX(-50%);top:-.8rem;background:var(--brand);color:#fff;border-radius:999px;padding:.15rem .6rem;font-size:.75rem;font-weight:700">Új</span>
+            <h3>UV minigolf</h3>
+            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">Egyéni és csoportos játék</p>
             <ul style="margin:0 0 .8rem 1.1rem">
-              <li>2 VR állomás</li>
-              <li>Multiplayer módok</li>
-              <li>Fotó/videó készítés</li>
+              <li>Glow pálya</li><li>Fotó-barát látvány</li><li>Családbarát</li>
             </ul>
-            <a class="btn btn-primary" href="#booking">Foglalok</a>
+            <a class="btn btn-primary" href="#booking">Időpontot kérek</a>
           </article>
           <article class="card">
-            <h3>Party</h3>
-            <p style="font-weight:800;font-size:1.1rem;margin:.25rem 0 .5rem">Egyedi ajánlat (3 óra)</p>
+            <h3>Party / csapatépítő</h3>
+            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">Egyedi csomag</p>
             <ul style="margin:0 0 .8rem 1.1rem">
-              <li>Zártkörű időpont</li>
-              <li>Snack + üdítő opció</li>
-              <li>Személyre szabott program</li>
+              <li>Zártkörű időpont</li><li>VR + minigolf kombináció</li><li>Igény szerint catering</li>
             </ul>
             <a class="btn btn-primary" href="#booking">Ajánlatot kérek</a>
           </article>
@@ -237,11 +216,11 @@
       </div>
     </section>
 
-    <!-- Booking / Contact -->
-    <section id="booking" class="section">
+    <!-- Foglalás -->
+    <section id="booking" class="section alt">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban hamar visszajelzünk.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
           <form id="contact-form" class="card form" novalidate>
             <div class="field">
@@ -267,13 +246,13 @@
               </div>
               <div class="field">
                 <label for="people">Létszám</label>
-                <input id="people" name="people" type="number" min="1" max="12" value="4" />
+                <input id="people" name="people" type="number" min="1" max="20" value="4" />
                 <small class="error"></small>
               </div>
             </div>
             <div class="field">
               <label for="message">Megjegyzés</label>
-              <textarea id="message" name="message" rows="4" placeholder="Szülinap, csapatépítés, kedvenc játékok…"></textarea>
+              <textarea id="message" name="message" rows="4" placeholder="VR, minigolf vagy mindkettő? Szülinap, csapatépítés, kedvenc játékok…"></textarea>
               <small class="error"></small>
             </div>
             <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
@@ -283,8 +262,8 @@
           <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
             <h3 style="color:var(--text);margin:0">Hasznos tudnivalók</h3>
             <ul style="margin:0 0 .2rem 1.1rem">
-              <li>Érkezzetek 10 perccel előbb a rövid eligazítás miatt.</li>
-              <li>Kényelmes ruházat ajánlott. Szemüveggel is használható.</li>
+              <li>Érkezz 10 perccel előbb a rövid eligazítás miatt.</li>
+              <li>Kényelmes ruházat ajánlott. VR szemüveggel is használható.</li>
               <li>14 éves kor alatt kísérő szükséges.</li>
               <li>Lemondás: 24 órával előre díjmentes.</li>
             </ul>
@@ -298,25 +277,25 @@
       </div>
     </section>
 
-    <!-- Galéria -->
-    <section id="gallery" class="section alt">
+    <!-- Galéria (VR) -->
+    <section id="gallery" class="section">
       <div class="container">
-        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Hangulatképek</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Pillanatok a VR szobából — mosoly, izgalom, és sok-sok nevetés.</p>
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">VR hangulatképek</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Jelenetek a VR szobából.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-          <img class="thumb-img" src="szoba-led.jpg?v=5"   alt="VR szoba lila LED világítással" loading="lazy">
-          <img class="thumb-img" src="szoba-feher.jpg?v=5" alt="Világos VR szoba, két headsettel" loading="lazy">
-          <img class="thumb-img" src="szoba-fa.jpg?v=5"    alt="VR szoba fa lamellás fallal" loading="lazy">
-          <img class="thumb-img" src="szoba-neon.jpg?v=5"  alt="Neon keretes VR játéktér" loading="lazy">
+          <img class="thumb-img" src="szoba-led.jpg?v=6"   alt="VR szoba lila LED világítással" loading="lazy">
+          <img class="thumb-img" src="szoba-feher.jpg?v=6" alt="Világos VR szoba, két headsettel" loading="lazy">
+          <img class="thumb-img" src="szoba-fa.jpg?v=6"    alt="VR szoba fa lamellás fallal" loading="lazy">
+          <img class="thumb-img" src="szoba-neon.jpg?v=6"  alt="Neon keretes VR játéktér" loading="lazy">
         </div>
       </div>
     </section>
 
     <!-- Helyszín & nyitvatartás -->
-    <section id="contact" class="section">
+    <section id="contact" class="section alt">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Könnyen megtalálsz</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kecskemét belvárosában. Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
           <div class="card">
             <h3>Helyszín</h3>
@@ -346,16 +325,17 @@
 
   <footer>
     <div class="container">
-      <p>© <span id="year"></span> VR Szoba — Minden jog fenntartva.</p>
+      <p>© <span id="year"></span> VR & UV Minigolf — Minden jog fenntartva.</p>
     </div>
   </footer>
 
-  <!-- Scroll reveal JS (újra-aktiválható) -->
+  <!-- Scroll reveal (újraaktiválható) -->
   <script>
   (() => {
     const sel = [
       '#hero h1', '#hero p', '#hero .actions',
       '#features .card',
+      '#minigolf img',
       '#pricing .card',
       '#gallery img',
       '#contact .card',
@@ -368,15 +348,10 @@
       el.style.transitionDelay = (i % 6) * 80 + 'ms';
     });
 
-    // Re-triggerelhető: ha kikerül a viewportból, levesszük a 'show'-t,
-    // amikor visszajön, újra felvesszük -> ismét animál.
     const io = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        } else {
-          entry.target.classList.remove('show');
-        }
+        if (entry.isIntersecting) entry.target.classList.add('show');
+        else entry.target.classList.remove('show'); // kilépés után újra animálható
       });
     }, { threshold: 0, rootMargin: '0px 0px -5% 0px' });
 
@@ -384,6 +359,7 @@
   })();
   </script>
 
+  <!-- UI JS -->
   <script>
     // Mobil menü kapcsoló
     const navToggle = document.querySelector('.nav-toggle');
@@ -395,8 +371,7 @@
         siteMenu.classList.toggle('show');
       });
     }
-
-    // Belső hivatkozások smooth scrollja
+    // Anchor smooth scroll
     document.addEventListener('click', (e) => {
       const a = e.target.closest('a[href^="#"]');
       if (!a) return;
@@ -409,8 +384,7 @@
         navToggle?.setAttribute('aria-expanded', 'false');
       }
     });
-
-    // Kapcsolati űrlap ellenőrzés + visszajelzés
+    // Kapcsolati űrlap ellenőrzés
     const form = document.getElementById('contact-form');
     const statusEl = document.getElementById('form-status');
     if (form){
@@ -421,28 +395,23 @@
         fields.forEach(id => {
           const input = document.getElementById(id);
           const err = input.nextElementSibling;
-          if (!input.value.trim()){
-            err.textContent = 'Kérlek töltsd ki ezt a mezőt.'; ok = false;
-          } else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)){
-            err.textContent = 'Adj meg érvényes e-mail címet.'; ok = false;
-          } else { err.textContent = ''; }
+          if (!input.value.trim()){ err.textContent = 'Kérlek töltsd ki ezt a mezőt.'; ok = false; }
+          else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)){ err.textContent = 'Adj meg érvényes e-mail címet.'; ok = false; }
+          else { err.textContent = ''; }
         });
-        if (ok){
-          statusEl.hidden = false; form.reset(); setTimeout(()=> statusEl.hidden = true, 4000);
-        }
+        if (ok){ statusEl.hidden = false; form.reset(); setTimeout(()=> statusEl.hidden = true, 4000); }
       });
     }
-
     // Év a láblécben
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
-  <!-- Strukturált adatok (JSON-LD) -->
+  <!-- Strukturált adatok -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "EntertainmentBusiness",
-    "name": "VR Szoba",
+    "name": "VR & UV Minigolf",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Korhánközi u. 10/A",
@@ -452,6 +421,7 @@
     },
     "telephone": "+36 1 234 5678",
     "sameAs": [],
+    "additionalType": "https://schema.org/GolfCourse",
     "openingHoursSpecification": [
       {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday"],"opens":"14:00","closes":"21:00"},
       {"@type":"OpeningHoursSpecification","dayOfWeek":["Friday"],"opens":"14:00","closes":"23:00"},
@@ -461,16 +431,12 @@
   }
   </script>
 
-  <noscript>A weboldal bizonyos funkciói JavaScriptet igényelnek.</noscript>
-
-  <!-- Service Worker regisztráció + auto-reload -->
+  <!-- Service Worker + auto-reload -->
   <script>
   if ('serviceWorker' in navigator) {
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      refreshing = true;
-      window.location.reload();
+      if (refreshing) return; refreshing = true; window.location.reload();
     });
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/vr-szoba/sw.js');
@@ -479,4 +445,3 @@
   </script>
 </body>
 </html>
-
