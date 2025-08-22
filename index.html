@@ -9,19 +9,19 @@
   <meta property="og:title" content="VR Szoba — Virtuális valóság élmény Kecskeméten" />
   <meta property="og:description" content="Csúcsminőségű VR-élmény többjátékos módokkal. Kecskemét belvárosában." />
   <meta property="og:type" content="website" />
+  <meta property="og:image" content="/vr-szoba/szoba-neon.jpg">
+
+  <!-- PWA / ikonok -->
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4e8cff">
-<!-- iOS webapp mód -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="VR Szoba">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#4e8cff">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-180.png">
 
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-<link rel="apple-touch-icon" href="icon-180.png">
-
-<meta property="og:image" content="/vr-szoba/szoba-neon.jpg">
-
+  <!-- iOS webapp mód -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="VR Szoba">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <style>
     /* ---- Alap téma / reset ---- */
@@ -95,7 +95,7 @@
 
     /* Rácsok */
     .features{grid-template-columns: repeat(auto-fit, minmax(220px, 1fr))}
-    .pricing{grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))}
+    .pricing{grid-template-columns: repeat(auto-fit, minmax(240px, 1 fr))}
 
     /* Form / input */
     .form{display:grid;gap:1rem;max-width:620px}
@@ -110,6 +110,17 @@
 
     /* Lablec */
     footer{border-top:1px solid var(--border);padding:1.2rem 0;text-align:center;color:var(--muted)}
+
+    /* --- Scroll reveal --- */
+    .reveal{
+      opacity:0;
+      transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform:none;
+    }
 
     /* Mobil menü */
     @media (max-width: 820px){
@@ -262,7 +273,7 @@
               <small class="error"></small>
             </div>
             <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
-            <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e‑mailben.</p>
+            <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e-mailben.</p>
           </form>
 
           <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
@@ -276,7 +287,7 @@
             <div style="display:grid;gap:.35rem;font-size:.95rem">
               <div>📞 <a href="tel:+3612345678">+36 1 234 5678</a></div>
               <div>✉️ <a href="mailto:hello@vrszoba.hu">hello@vrszoba.hu</a></div>
-              <div>📍 6000 Kecskemét, Példa utca 12.</div>
+              <div>📍 6000 Kecskemét, Korhánközi u. 10/A</div>
             </div>
           </aside>
         </div>
@@ -288,18 +299,12 @@
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Hangulatképek</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Pillanatok a VR szobából — mosoly, izgalom, és sok-sok nevetés.</p>
-        <!--
-          Tedd a képeidet a repo gyökerébe létrehozott img/ mappába (pl. img/vr1.jpg ...),
-          és nevezd át az elérési utakat lent. A relatív elérési út (img/...) fontos GitHub Pages-hez!
-        -->
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-  <img class="thumb-img" src="szoba-led.jpg?v=5"   alt="VR szoba lila LED világítással" loading="lazy">
-  <img class="thumb-img" src="szoba-feher.jpg?v=5" alt="Világos VR szoba, két headsettel" loading="lazy">
-  <img class="thumb-img" src="szoba-fa.jpg?v=5"    alt="VR szoba fa lamellás fallal" loading="lazy">
-  <img class="thumb-img" src="szoba-neon.jpg?v=5"  alt="Neon keretes VR játéktér" loading="lazy">
-</div>
-
-
+          <img class="thumb-img" src="szoba-led.jpg?v=5"   alt="VR szoba lila LED világítással" loading="lazy">
+          <img class="thumb-img" src="szoba-feher.jpg?v=5" alt="Világos VR szoba, két headsettel" loading="lazy">
+          <img class="thumb-img" src="szoba-fa.jpg?v=5"    alt="VR szoba fa lamellás fallal" loading="lazy">
+          <img class="thumb-img" src="szoba-neon.jpg?v=5"  alt="Neon keretes VR játéktér" loading="lazy">
+        </div>
       </div>
     </section>
 
@@ -307,22 +312,20 @@
     <section id="contact" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Könnyen megtalálsz</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kecskemét belvárosában (példa). Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kecskemét belvárosában. Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-         <div class="card">
-  <h3>Helyszín</h3>
-  <p>6000 Kecskemét, Korhánközi u. 10/A</p>
-  <p style="display:flex;gap:.6rem;flex-wrap:wrap">
-    <a class="btn btn-ghost"
-       href="https://maps.google.com/?q=Kecskem%C3%A9t%2C%20Korh%C3%A1nk%C3%B6zi%20u%2010%2FA%2C%206000"
-       target="_blank" rel="noreferrer">Megnyitás Google Mapsben</a>
-
-    <a class="btn btn-ghost"
-       href="https://waze.com/ul?q=Kecskem%C3%A9t%2C%20Korh%C3%A1nk%C3%B6zi%20u%2010%2FA%2C%206000&navigate=yes"
-       target="_blank" rel="noreferrer">Megnyitás Waze-ben</a>
-  </p>
-</div>
-
+          <div class="card">
+            <h3>Helyszín</h3>
+            <p>6000 Kecskemét, Korhánközi u. 10/A</p>
+            <p style="display:flex;gap:.6rem;flex-wrap:wrap">
+              <a class="btn btn-ghost"
+                 href="https://maps.google.com/?q=Kecskem%C3%A9t%2C%20Korh%C3%A1nk%C3%B6zi%20u%2010%2FA%2C%206000"
+                 target="_blank" rel="noreferrer">Megnyitás Google Mapsben</a>
+              <a class="btn btn-ghost"
+                 href="https://waze.com/ul?q=Kecskem%C3%A9t%2C%20Korh%C3%A1nk%C3%B6zi%20u%2010%2FA%2C%206000&navigate=yes"
+                 target="_blank" rel="noreferrer">Megnyitás Waze-ben</a>
+            </p>
+          </div>
           <div class="card">
             <h3>Nyitvatartás</h3>
             <div style="display:grid;grid-template-columns:1fr auto;gap:.4rem;color:var(--muted)">
@@ -342,6 +345,37 @@
       <p>© <span id="year"></span> VR Szoba — Minden jog fenntartva.</p>
     </div>
   </footer>
+
+  <!-- Scroll reveal JS -->
+  <script>
+  (() => {
+    const sel = [
+      '#hero h1', '#hero p', '#hero .actions',
+      '#features .card',
+      '#pricing .card',
+      '#gallery img',
+      '#contact .card',
+      'footer'
+    ].join(',');
+
+    const items = Array.from(document.querySelectorAll(sel)).filter(Boolean);
+    items.forEach((el, i) => {
+      el.classList.add('reveal');
+      el.style.transitionDelay = (i % 6) * 80 + 'ms';
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    items.forEach(el => io.observe(el));
+  })();
+  </script>
 
   <script>
     // Mobil menü kapcsoló
@@ -383,7 +417,7 @@
           if (!input.value.trim()){
             err.textContent = 'Kérlek töltsd ki ezt a mezőt.'; ok = false;
           } else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)){
-            err.textContent = 'Adj meg érvényes e‑mail címet.'; ok = false;
+            err.textContent = 'Adj meg érvényes e-mail címet.'; ok = false;
           } else { err.textContent = ''; }
         });
         if (ok){
@@ -396,20 +430,19 @@
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
-  <!-- Strukturált adatok a jobb megjelenéshez (Google) -->
+  <!-- Strukturált adatok (JSON-LD) -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "EntertainmentBusiness",
     "name": "VR Szoba",
     "address": {
-  "@type": "PostalAddress",
-  "streetAddress": "Korhánközi u. 10/A",
-  "addressLocality": "Kecskemét",
-  "postalCode": "6000",
-  "addressCountry": "HU"
-}
-
+      "@type": "PostalAddress",
+      "streetAddress": "Korhánközi u. 10/A",
+      "addressLocality": "Kecskemét",
+      "postalCode": "6000",
+      "addressCountry": "HU"
+    },
     "telephone": "+36 1 234 5678",
     "sameAs": [],
     "openingHoursSpecification": [
@@ -423,22 +456,21 @@
 
   <noscript>A weboldal bizonyos funkciói JavaScriptet igényelnek.</noscript>
 
- <script>
-if ('serviceWorker' in navigator) {
-  // egyszeri újratöltés, amikor új SW veszi át a kontrollt
-  let refreshing = false;
-  navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (refreshing) return;
-    refreshing = true;
-    window.location.reload();
-  });
+  <!-- Service Worker regisztráció + auto-reload -->
+  <script>
+  if ('serviceWorker' in navigator) {
+    // egyszeri újratöltés, amikor új SW veszi át a kontrollt
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
 
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/vr-szoba/sw.js');
-  });
-}
-</script>
-
-
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/vr-szoba/sw.js');
+    });
+  }
+  </script>
 </body>
 </html>
