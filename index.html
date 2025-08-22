@@ -288,7 +288,13 @@
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-          <form id="contact-form" class="card form" novalidate>
+
+          <!-- FORM — Formspree bekötve -->
+          <form id="contact-form"
+                class="card form"
+                action="https://formspree.io/f/xeozykpz"
+                method="POST"
+                novalidate>
             <div class="field">
               <label for="name">Név</label>
               <input id="name" name="name" type="text" required placeholder="Teljes neved" />
@@ -321,8 +327,13 @@
               <textarea id="message" name="message" rows="4" placeholder="VR, Minigolf vagy kombinált csomag? Szülinap, csapatépítés…"></textarea>
               <small class="error"></small>
             </div>
-            <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
-            <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e-mailben.</p>
+
+            <!-- rejtett mezők -->
+            <input type="hidden" name="_subject" id="subjectField" value="Új foglalás érdeklődés (VR & Minigolf)">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+
+            <button id="submitBtn" class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
+            <p id="form-status" role="status" class="status" hidden></p>
           </form>
 
           <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
@@ -419,7 +430,7 @@
     </div>
   </footer>
 
-  <!-- Scroll reveal JS (újra-aktiválható, visszagörgetésnél is) -->
+  <!-- Scroll reveal JS -->
   <script>
   (() => {
     const sel = [
@@ -447,7 +458,7 @@
   })();
   </script>
 
-  <!-- Modál nyitás/zárás (fókuszcsapda, Esc, háttérkatt) -->
+  <!-- Modál nyitás/zárás -->
   <script>
   (() => {
     const notice = document.getElementById('opening-notice');
@@ -493,10 +504,111 @@
 
     // Automatikus megjelenítés oldalbetöltéskor:
     openModal();
-
-    // Ha egyszeri megjelenítés kellene munkamenetenként:
-    // használj sessionStorage-t és itt csak feltételesen hívd meg az openModal()-t.
   })();
+  </script>
+
+  <!-- Mobil menü + Formspree bekötés + lábléci év -->
+  <script>
+    // Mobil menü kapcsoló
+    const navToggle = document.querySelector('.nav-toggle');
+    const siteMenu = document.querySelector('#site-menu');
+    if (navToggle && siteMenu){
+      navToggle.addEventListener('click', () => {
+        const open = navToggle.getAttribute('aria-expanded') === 'true';
+        navToggle.setAttribute('aria-expanded', String(!open));
+        siteMenu.classList.toggle('show');
+      });
+    }
+
+    // Belső hivatkozások smooth scrollja
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el){
+        e.preventDefault();
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        siteMenu?.classList.remove('show');
+        navToggle?.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Kapcsolati űrlap -> Formspree
+    const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('form-status');
+    const submitBtn = document.getElementById('submitBtn');
+    const subjectField = document.getElementById('subjectField');
+
+    function setStatus(msg, ok=true){
+      statusEl.textContent = msg;
+      statusEl.style.color = ok ? '#8ae6a2' : '#ff6b6b';
+      statusEl.hidden = false;
+    }
+    function clearErrors(){ form.querySelectorAll('.error').forEach(e => e.textContent = ''); }
+
+    if (form){
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+        let ok = true;
+        const ids = ['name','email','date','time'];
+        ids.forEach(id => {
+          const input = document.getElementById(id);
+          const err = input.nextElementSibling;
+          if (!input.value.trim()){
+            err.textContent = 'Kérlek töltsd ki ezt a mezőt.'; ok = false;
+          } else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)){
+            err.textContent = 'Adj meg érvényes e-mail címet.'; ok = false;
+          } else { err.textContent = ''; }
+        });
+        if (!ok) return;
+
+        // Tárgysor finomítás
+        const name = document.getElementById('name').value.trim();
+        const date = document.getElementById('date').value;
+        const time = document.getElementById('time').value;
+        subjectField.value = `Foglalás érdeklődés – ${name} – ${date || 'dátum?'} ${time || ''}`;
+
+        // Küldés
+        const fd = new FormData(form);
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Küldés...';
+        try{
+          const resp = await fetch(form.action, {
+            method: 'POST',
+            body: fd,
+            headers: { 'Accept': 'application/json' }
+          });
+
+          // Formspree siker
+          if (resp.ok){
+            setStatus('Köszönjük! Hamarosan felvesszük veled a kapcsolatot e-mailben.', true);
+            form.reset();
+          } else {
+            // Hibaüzenetek (ha JSON)
+            let errText = 'Hoppá, valami hiba történt. Próbáld újra később.';
+            try{
+              const data = await resp.json();
+              if (data && data.errors && data.errors.length){
+                errText = data.errors.map(e => e.message).join(' • ');
+              }
+            }catch{}
+            setStatus(errText, false);
+          }
+        }catch{
+          setStatus('Nem sikerült elküldeni (hálózati hiba). Próbáld újra!', false);
+        }finally{
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Kérem a visszaigazolást';
+          // 4 mp múlva elrejtjük a státuszt
+          setTimeout(() => statusEl.hidden = true, 4000);
+        }
+      });
+    }
+
+    // Év a láblécben
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 
   <!-- Strukturált adatok (JSON-LD) -->
