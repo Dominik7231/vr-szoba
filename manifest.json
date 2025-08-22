@@ -1,6 +1,6 @@
 {
-  "name": "VR Szoba Kecskemét",
-  "short_name": "VR Szoba",
+  "name": "VR & UV Minigolf Kecskemét",
+  "short_name": "VR & Minigolf",
   "start_url": "/vr-szoba/index.html",
   "scope": "/vr-szoba/",
   "display": "standalone",
@@ -11,3 +11,4 @@
     { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
+
