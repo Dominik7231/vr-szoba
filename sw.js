@@ -1,5 +1,5 @@
 // sw.js — VR & UV Minigolf (network-first HTML + auto-reload)
-const VERSION = "vr-szoba-v7"; // <-- verziót léptettük
+const VERSION = "vr-szoba-v8"; // <-- verziót léptettük
 const STATIC_CACHE = `static-${VERSION}`;
 const PAGES_CACHE  = `pages-${VERSION}`;
 
@@ -19,7 +19,7 @@ const ASSETS = [
   "/vr-szoba/szoba-fa.jpg",
   "/vr-szoba/szoba-neon.jpg",
 
-  // Minigolf galéria (egységes név)
+  // Minigolf galéria
   "/vr-szoba/golf-1.jpg",
   "/vr-szoba/golf-2.jpg",
   "/vr-szoba/golf-3.jpg"
@@ -74,3 +74,4 @@ async function staleWhileRevalidate(cacheName, req) {
   const networkPromise = fetch(req).then((resp) => { cache.put(req, resp.clone()); return resp; });
   return cached || networkPromise;
 }
+
