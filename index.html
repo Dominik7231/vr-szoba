@@ -40,6 +40,9 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%}
+    /* Fontos: semmi se törje meg a hidden-t */
+    [hidden]{display:none!important}
+
     body{
       margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
       background: radial-gradient(1200px 600px at 20% -10%, var(--brand-ink), transparent 55%), linear-gradient(180deg, var(--bg), #0d0f17);
@@ -641,13 +644,15 @@
         logoutBtn.hidden = false;
         openAuthBtn.hidden = true;
       } else {
+        userEmailEl.textContent = '';
         userChip.hidden = true;
         logoutBtn.hidden = true;
         openAuthBtn.hidden = false;
       }
     }
 
-    // Induláskor session lekérés + UI
+    // Induláskor: alapállapot, majd session lekérés
+    renderUser(null);
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       renderUser(session?.user || null);
@@ -658,17 +663,13 @@
       renderUser(session?.user || null);
     });
 
-    // Kijelentkezés – delegált kezelő (akkor is működik, ha a gomb rejtettből láthatóvá válik)
-    document.addEventListener('click', async (e) => {
-      const target = e.target.closest?.('#logout-btn');
-      if (!target) return;
+    // Kijelentkezés – KÖZVETLEN handler a gombon
+    logoutBtn?.addEventListener('click', async (e) => {
       e.preventDefault();
       try{
-        const { error } = await supabase.auth.signOut();
+        const { error } = await supabase.auth.signOut(); // hivatalos signOut hívás
         if (error) throw error;
         renderUser(null);
-        // opcionális visszajelzés
-        // alert('Kijelentkeztél.');
       }catch(err){
         alert('Kijelentkezés sikertelen: ' + (err?.message || err));
       }
@@ -681,7 +682,7 @@
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const { error } = await supabase.auth.signInWithPassword({ email, password }); // v2 API
       if (error){
         loginStatus.textContent = 'Hiba: ' + error.message;
         loginStatus.hidden = false;
@@ -719,7 +720,7 @@
       const token_hash = url.searchParams.get('token_hash');
       const type = url.searchParams.get('type'); // pl. "email"
       if (token_hash && type){
-        const { error } = await supabase.auth.verifyOtp({ token_hash, type });
+        const { error } = await supabase.auth.verifyOtp({ token_hash, type }); // verifyOtp minta
         if (!error){
           history.replaceState({}, '', window.location.pathname);
           const { data: { user } } = await supabase.auth.getUser();
