@@ -132,6 +132,14 @@
       border-radius:.6rem; padding:.3rem .55rem; font:inherit; line-height:1; cursor:pointer;
     }
 
+    /* --- Auth szekció --- */
+    #account .tabs{display:flex;gap:.5rem;margin:.6rem 0 1rem}
+    #account .tabs button{border:1px solid var(--border);background:transparent;color:var(--text);padding:.5rem .8rem;border-radius:.6rem;cursor:pointer}
+    #account .tabs button.active{background:var(--brand);color:#fff;border-color:transparent}
+    #account .two-col{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+    #whoami{color:var(--muted);margin:.2rem 0 .8rem}
+    #auth-msg{margin:.4rem 0 0;min-height:1.2em}
+
     /* Mobil menü */
     @media (max-width: 820px){
       .nav-toggle{display:inline-block}
@@ -221,8 +229,59 @@
       </div>
     </section>
 
+    <!-- ⬇⬇⬇ Fiók (Regisztráció / Bejelentkezés) -->
+    <section id="account" class="section alt">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Fiók</h2>
+        <p id="whoami">Nem vagy bejelentkezve.</p>
+
+        <div class="tabs">
+          <button id="tab-login" class="active" type="button">Bejelentkezés</button>
+          <button id="tab-signup" type="button">Regisztráció</button>
+          <button id="btn-logout" class="btn btn-ghost" type="button" style="margin-left:auto;display:none">Kijelentkezés</button>
+        </div>
+
+        <div class="two-col">
+          <form id="login-form" class="card form" autocomplete="on">
+            <h3 style="margin:.2rem 0 0">Bejelentkezés</h3>
+            <div class="field">
+              <label for="login-email">E-mail</label>
+              <input id="login-email" type="email" placeholder="te@pelda.hu" required autocomplete="email" />
+              <small class="error"></small>
+            </div>
+            <div class="field">
+              <label for="login-password">Jelszó</label>
+              <input id="login-password" type="password" placeholder="••••••••" required autocomplete="current-password" />
+              <small class="error"></small>
+            </div>
+            <button class="btn btn-primary" type="submit">Belépés</button>
+            <p id="login-msg" class="status" aria-live="polite"></p>
+          </form>
+
+          <form id="signup-form" class="card form" autocomplete="on" style="display:none">
+            <h3 style="margin:.2rem 0 0">Regisztráció</h3>
+            <div class="field">
+              <label for="signup-email">E-mail</label>
+              <input id="signup-email" type="email" placeholder="te@pelda.hu" required autocomplete="email" />
+              <small class="error"></small>
+            </div>
+            <div class="field">
+              <label for="signup-password">Jelszó</label>
+              <input id="signup-password" type="password" placeholder="Min. 6 karakter" required autocomplete="new-password" />
+              <small class="error"></small>
+            </div>
+            <button class="btn btn-primary" type="submit">Fiók létrehozása</button>
+            <p id="signup-msg" class="status" aria-live="polite"></p>
+          </form>
+        </div>
+
+        <p id="auth-msg"></p>
+      </div>
+    </section>
+    <!-- ⬆⬆⬆ Fiók vége -->
+
     <!-- Packages -->
-    <section id="packages" class="section alt">
+    <section id="packages" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Csomagok — VR & UV Minigolf</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Egyszerű árak, rugalmas időpontok. Válaszd a neked valót!</p>
@@ -289,9 +348,8 @@
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
 
-          <!-- ⬇⬇⬇ FORMSubmit: közvetlenül az emailedre küld -->
-          <form id="contact-form" class="card form" action="https://formsubmit.co/dobosdomi09@gmail.com" method="POST" accept-charset="UTF-8">
-            <!-- FormSubmit speciális mezők -->
+          <!-- FormSubmit (a foglalásról emailt küld) -->
+          <form id="contact-form" class="card form" action="https://formsubmit.co/dobosdomi09@gmail.com" method="POST" accept-charset="UTF-8" novalidate>
             <input type="hidden" name="_subject" value="Új foglalási kérés – VR/Minigolf">
             <input type="hidden" name="_template" value="table">
             <input type="hidden" name="_captcha" value="false">
@@ -333,7 +391,6 @@
             <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
             <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e-mailben.</p>
           </form>
-          <!-- ⬆⬆⬆ -->
 
           <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
             <h3 style="color:var(--text);margin:0">Hasznos tudnivalók</h3>
@@ -399,7 +456,7 @@
     <section id="contact" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Könnyen megtalálsz</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kecskemét belvárosában. Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
+      <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Kecskemét belvárosában. Tömegközlekedéssel és autóval is egyszerűen megközelíthető.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
           <div class="card">
             <h3>Helyszín</h3>
@@ -478,7 +535,6 @@
     const header = document.querySelector('header');
     const main = document.getElementById('main');
     const footer = document.querySelector('footer');
-
     if (!notice || !closeBtn) return;
 
     function openModal(){
@@ -510,15 +566,127 @@
         else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
       }
     }
-
     notice.addEventListener('click', (e) => { if (e.target === notice) closeModal(); });
     closeBtn.addEventListener('click', closeModal);
 
-    // Automatikus megjelenítés oldalbetöltéskor:
-    openModal();
-    // Egyszeri megjelenítéshez használhatsz sessionStorage-t:
-    // if (!sessionStorage.getItem('openingShown')) { openModal(); sessionStorage.setItem('openingShown','1'); }
+    // oldalletöltéskor megjelenítés (ha kell):
+    // openModal();
   })();
+  </script>
+
+  <!-- Supabase Auth (CDN) -->
+  <script type="module">
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+    // Saját projekted:
+    const SUPABASE_URL = 'https://opaxjkektkvbktzsyjmn.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wYXhqa2VrdGt2Ymt0enN5am1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NDgyNDIsImV4cCI6MjA3MTUyNDI0Mn0.08MuTnZZoIst55SmRXVKkTrLLjnxBMnHVc5U_pbovUM';
+
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // UI elemek
+    const whoami = document.getElementById('whoami');
+    const authMsg = document.getElementById('auth-msg');
+    const btnLogout = document.getElementById('btn-logout');
+
+    const tabLogin = document.getElementById('tab-login');
+    const tabSignup = document.getElementById('tab-signup');
+    const formLogin = document.getElementById('login-form');
+    const formSignup = document.getElementById('signup-form');
+
+    function showLogin(){
+      tabLogin.classList.add('active'); tabSignup.classList.remove('active');
+      formLogin.style.display = ''; formSignup.style.display = 'none';
+    }
+    function showSignup(){
+      tabSignup.classList.add('active'); tabLogin.classList.remove('active');
+      formSignup.style.display = ''; formLogin.style.display = 'none';
+    }
+    tabLogin?.addEventListener('click', showLogin);
+    tabSignup?.addEventListener('click', showSignup);
+
+    async function refreshAuthUI(){
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user){
+        whoami.textContent = `Bejelentkezve: ${user.email}`;
+        btnLogout.style.display = 'inline-block';
+        authMsg.textContent = '';
+      } else {
+        whoami.textContent = 'Nem vagy bejelentkezve.';
+        btnLogout.style.display = 'none';
+      }
+    }
+
+    // Regisztráció
+    formSignup?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const { error } = await supabase.auth.signUp({ email, password });
+      const msg = document.getElementById('signup-msg');
+      if (error){
+        msg.textContent = 'Hiba: ' + error.message;
+      } else {
+        msg.textContent = 'Siker! Nézd meg a bejövő leveleidet a megerősítéshez (ha szükséges).';
+        e.target.reset();
+        showLogin();
+      }
+      await refreshAuthUI();
+    });
+
+    // Bejelentkezés
+    formLogin?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const msg = document.getElementById('login-msg');
+      if (error){
+        msg.textContent = 'Hiba: ' + error.message;
+      } else {
+        msg.textContent = 'Sikeres bejelentkezés!';
+        e.target.reset();
+      }
+      await refreshAuthUI();
+    });
+
+    // Kijelentkezés
+    btnLogout?.addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      authMsg.textContent = 'Kijelentkeztél.';
+      await refreshAuthUI();
+    });
+
+    // Auth események figyelése
+    supabase.auth.onAuthStateChange((_event, _session) => {
+      refreshAuthUI();
+    });
+
+    // induláskor
+    refreshAuthUI();
+
+    // Év a láblécben
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Kapcsolati űrlap kliens oldali ellenőrzés (egyszerű)
+    const form = document.getElementById('contact-form');
+    const statusEl = document.getElementById('form-status');
+    if (form){
+      form.addEventListener('submit', (e) => {
+        // FormSubmit miatt hagyjuk menni, csak basic check:
+        const fields = ['name','email','date','time'];
+        let ok = true;
+        for (const id of fields){
+          const input = document.getElementById(id);
+          const err = input.nextElementSibling;
+          if (!input.value.trim()){ err.textContent = 'Kérlek töltsd ki ezt a mezőt.'; ok = false; }
+          else if (id === 'email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(input.value)){ err.textContent = 'Adj meg érvényes e-mail címet.'; ok = false; }
+          else { err.textContent = ''; }
+        }
+        if (!ok){ e.preventDefault(); }
+        else { statusEl.hidden = false; setTimeout(()=> statusEl.hidden = true, 4000); }
+      });
+    }
   </script>
 
   <!-- Strukturált adatok (JSON-LD) -->
@@ -562,4 +730,3 @@
   </script>
 </body>
 </html>
-
