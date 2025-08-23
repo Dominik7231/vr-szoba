@@ -12,17 +12,14 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="/vr-szoba/Új%20logo.jpg" />
 
-  <!-- PWA / ikonok -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4e8cff">
 
-  <!-- Böngésző ikonok (új logó) -->
   <link rel="icon" type="image/jpeg" href="Új%20logo.jpg">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <link rel="apple-touch-icon" href="Új%20logo.jpg">
 
-  <!-- iOS webapp mód -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-title" content="VR & Minigolf">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -195,7 +192,12 @@
         <a href="#faq">GYIK</a>
         <a href="#gallery">Galéria</a>
         <a href="#contact">Kapcsolat</a>
+
+        <!-- Auth UI -->
+        <span id="user-chip" class="btn btn-ghost" hidden>Belépve: <strong id="user-email"></strong></span>
         <a class="btn btn-ghost" href="#" id="open-auth">Belépés</a>
+        <a class="btn btn-ghost" href="#" id="logout-btn" hidden>Kijelentkezés</a>
+
         <a class="btn btn-primary" href="#booking">Foglalás</a>
       </nav>
     </div>
@@ -316,7 +318,7 @@
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-          <!-- FORMSubmit: AJAX beküldés, nincs külső “Thanks” oldal -->
+          <!-- FormSubmit: AJAX beküldés, nincs külső “Thanks” oldal -->
           <form id="contact-form" class="card form" action="https://formsubmit.co/ajax/dobosdomi09@gmail.com" method="POST" accept-charset="UTF-8">
             <input type="hidden" name="_subject" value="Új foglalási kérés – VR/Minigolf">
             <input type="hidden" name="_template" value="table">
@@ -501,20 +503,20 @@
       const root = document.getElementById(rootId);
       if (!root) return;
       const closeBtn = root.querySelector('[data-close]');
-      function open(){ root.hidden=false; requestAnimationFrame(()=>root.classList.add('show')); document.body.classList.add('modal-open'); onOpen?.(); }
+      function open(){ root.hidden=false; requestAnimationFrame(()=>root.classList.add('show')); document.body.classList.add('modal-open'); onOpen && onOpen(); }
       function close(){ root.classList.remove('show'); document.body.classList.remove('modal-open'); setTimeout(()=>root.hidden=true,200); }
       root.addEventListener('click', e => { if (e.target === root) close(); });
-      closeBtn?.addEventListener('click', close);
+      closeBtn && closeBtn.addEventListener('click', close);
       return { open, close, el: root };
     }
 
     // Nyitási értesítő: automatikus megjelenítés
     const opening = wireModal('opening-notice');
-    opening?.open();
+    opening && opening.open();
 
     // Auth modál
     const auth = wireModal('auth-modal');
-    document.getElementById('open-auth')?.addEventListener('click', (e)=>{ e.preventDefault(); auth?.open(); });
+    document.getElementById('open-auth')?.addEventListener('click', (e)=>{ e.preventDefault(); auth && auth.open(); });
 
     // Auth tabok
     const tabLogin = document.getElementById('tab-login');
@@ -531,6 +533,9 @@
     tabLogin?.addEventListener('click', ()=>selectTab('login'));
     tabSignup?.addEventListener('click', ()=>selectTab('signup'));
     selectTab('login');
+
+    // Exponáljuk a close-t más scripteknek
+    window.__authModal = auth;
   })();
   </script>
 
@@ -580,32 +585,67 @@
   })();
   </script>
 
-  <!-- Supabase auth (beállítással + e-mail megerősítés kezeléssel) -->
+  <!-- Supabase auth -->
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-    // ÁLLÍTSD BE a Supabase Dashboardon:
-    // - Authentication → URL Configuration → Site URL: https://dominik7231.github.io/vr-szoba/
-    // - Redirect URLs: add hozzá ugyan ezt a domaint (és ha akarsz, bármely konkrét oldalt)
     const SUPABASE_URL = 'https://opaxjkektkvbktzsyjmn.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wYXhqa2VrdGt2Ymt0enN5am1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NDgyNDIsImV4cCI6MjA3MTUyNDI0Mn0.08MuTnZZoIst55SmRXVKkTrLLjnxBMnHVc5U_pbovUM';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Fejléc elemek
+    const openAuthBtn = document.getElementById('open-auth');
+    const logoutBtn = document.getElementById('logout-btn');
+    const userChip = document.getElementById('user-chip');
+    const userEmailEl = document.getElementById('user-email');
+
+    function renderUser(user){
+      if (user && user.email){
+        userEmailEl.textContent = user.email;
+        userChip.hidden = false;
+        logoutBtn.hidden = false;
+        openAuthBtn.hidden = true;
+      } else {
+        userChip.hidden = true;
+        logoutBtn.hidden = true;
+        openAuthBtn.hidden = false;
+      }
+    }
+
+    // Induláskor session lekérés + UI
+    (async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      renderUser(session?.user || null);
+    })();
+
+    // Auth state változás figyelése
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      renderUser(session?.user || null);
+    });
+
+    // Kijelentkezés
+    logoutBtn?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      renderUser(null);
+    });
 
     // Bejelentkezés
     const loginForm = document.getElementById('login-form');
     const loginStatus = document.getElementById('login-status');
     loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = (document.getElementById('login-email') as HTMLInputElement).value.trim();
-      const password = (document.getElementById('login-password') as HTMLInputElement).value;
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error){
         loginStatus.textContent = 'Hiba: ' + error.message;
         loginStatus.hidden = false;
       } else {
-        loginStatus.textContent = 'Sikeres belépés!'; loginStatus.hidden = false;
-        setTimeout(()=> location.hash = '#', 800);
+        loginStatus.textContent = 'Sikeres belépés!';
+        loginStatus.hidden = false;
+        // Zárjuk a modált és frissítsük a fejlécet
+        window.__authModal?.close?.();
       }
     });
 
@@ -614,10 +654,11 @@
     const signupStatus = document.getElementById('signup-status');
     signupForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = (document.getElementById('signup-email') as HTMLInputElement).value.trim();
-      const password = (document.getElementById('signup-password') as HTMLInputElement).value;
-      const redirectTo = 'https://dominik7231.github.io/vr-szoba/?next=%2F';
-      const { data, error } = await supabase.auth.signUp({
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      // Ide a tényleges, engedélyezett redirect URL-ed kell
+      const redirectTo = window.location.origin + '/vr-szoba/';
+      const { error } = await supabase.auth.signUp({
         email, password,
         options: { emailRedirectTo: redirectTo }
       });
@@ -630,24 +671,24 @@
       }
     });
 
-    // E-mail megerősítő link kezelése (token_hash + type a queryben)
+    // E-mail megerősítés kezelése (token_hash + type a queryben)
     (async () => {
       const url = new URL(window.location.href);
       const token_hash = url.searchParams.get('token_hash');
-      const type = url.searchParams.get('type'); // pl. "email" vagy "recovery"
-      const next = url.searchParams.get('next') || '/vr-szoba/';
-
+      const type = url.searchParams.get('type'); // pl. "email"
       if (token_hash && type){
-        const { error } = await supabase.auth.verifyOtp({ token_hash, type }); // Supabase docs: verifyOtp token_hash + type
+        const { error } = await supabase.auth.verifyOtp({ token_hash, type });
         if (!error){
-          // Tisztítsuk az URL-t, majd irány a 'next'
-          history.replaceState({}, '', next);
+          // siker — távolítsuk el a queryt a címsorból
+          history.replaceState({}, '', window.location.pathname);
+          // frissítsük az UI-t a jelenlegi userrel
+          const { data: { user } } = await supabase.auth.getUser();
+          renderUser(user || null);
         } else {
           alert('E-mail megerősítés hiba: ' + error.message);
         }
       }
     })();
-
   </script>
 
   <!-- Strukturált adatok -->
@@ -675,7 +716,7 @@
   }
   </script>
 
-  <!-- Service Worker regisztráció + auto-reload -->
+  <!-- Service Worker regisztráció + év a láblécben -->
   <script>
   if ('serviceWorker' in navigator) {
     let refreshing = false;
@@ -692,4 +733,3 @@
   </script>
 </body>
 </html>
-
