@@ -84,8 +84,8 @@
 
     .form{display:grid;gap:1rem;max-width:620px}
     .field{display:grid;gap:.35rem}
-    input,textarea{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:.7rem;padding:.7rem .8rem;font:inherit;outline:none}
-    input:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0 0 .25rem var(--ring)}
+    input,textarea,select{background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:.7rem;padding:.7rem .8rem;font:inherit;outline:none}
+    input:focus,textarea:focus,select:focus{border-color:var(--brand);box-shadow:0 0 0 .25rem var(--ring)}
     .error{color:#ff6b6b;min-height:1em}
     .status{margin-top:.6rem;color:#8ae6a2}
 
@@ -188,6 +188,7 @@
       <nav id="site-menu" class="menu" aria-label="Főmenü">
         <a href="#hero-vr">VR</a>
         <a href="#hero-golf">UV Minigolf</a>
+        <a href="#news">Újdonságok</a>
         <a href="#packages">Csomagok</a>
         <a href="#faq">GYIK</a>
         <a href="#gallery">Galéria</a>
@@ -235,6 +236,19 @@
       </div>
     </section>
 
+    <!-- Újdonságok -->
+    <section id="news" class="section">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Újdonságok</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Friss hírek a VR szobából és az UV minigolf pályáról.</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">
+          <article class="card"><h3>⭐ Halloweeni UV hétvége</h3><p>Tematikus pályafények és jelmezverseny. Okt. 31–Nov. 3.</p></article>
+          <article class="card"><h3>🎮 Új VR-játékok</h3><p>Kooperatív túlélős és ritmusjáték érkezett — próbáld ki!</p></article>
+          <article class="card"><h3>🎁 Ajándékutalványok</h3><p>Megérkeztek az ünnepi ajándékkártyák — kérd egyedi üzenettel.</p></article>
+        </div>
+      </div>
+    </section>
+
     <!-- Features (VR) -->
     <section id="features" class="section">
       <div class="container">
@@ -251,7 +265,7 @@
       </div>
     </section>
 
-    <!-- Packages -->
+    <!-- Csomagok -->
     <section id="packages" class="section alt">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Csomagok — VR & UV Minigolf</h2>
@@ -312,7 +326,7 @@
       </div>
     </section>
 
-    <!-- Booking / Contact -->
+    <!-- Foglalás / Kapcsolat -->
     <section id="booking" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
@@ -335,6 +349,7 @@
               <input id="email" name="email" type="email" required placeholder="te@pelda.hu" autocomplete="email" />
               <small class="error" aria-live="polite"></small>
             </div>
+
             <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:.75rem">
               <div class="field">
                 <label for="date">Dátum</label>
@@ -352,9 +367,29 @@
                 <small class="error"></small>
               </div>
             </div>
+
+            <div class="field">
+              <label for="package">Csomag</label>
+              <select id="package" name="package" required>
+                <option value="">Válassz csomagot…</option>
+                <optgroup label="VR">
+                  <option value="Alap VR">Alap VR</option>
+                  <option value="Csapat VR">Csapat VR</option>
+                </optgroup>
+                <optgroup label="UV Minigolf">
+                  <option value="Alap Minigolf">Alap Minigolf</option>
+                  <option value="Csapat Minigolf">Csapat Minigolf</option>
+                </optgroup>
+                <optgroup label="Esemény">
+                  <option value="Party csomag">Party csomag</option>
+                </optgroup>
+              </select>
+              <small class="error"></small>
+            </div>
+
             <div class="field">
               <label for="message">Megjegyzés</label>
-              <textarea id="message" name="message" rows="4" placeholder="VR, Minigolf vagy kombinált csomag? Szülinap, csapatépítés…"></textarea>
+              <textarea id="message" name="message" rows="4" placeholder="Extra infó: szülinap, csapatépítés, külön kérés…"></textarea>
               <small class="error"></small>
             </div>
 
@@ -462,8 +497,8 @@
     const sel = [
       '#hero-vr .badge', '#hero-vr h1', '#hero-vr p', '#hero-vr .actions',
       '#hero-golf .badge', '#hero-golf h2', '#hero-golf p', '#hero-golf .actions',
-      '#features .card', '#packages .card', '#gallery img', '#gallery-golf img',
-      '#faq .card', '#contact .card', 'footer'
+      '#news .card', '#features .card', '#packages .card',
+      '#gallery img', '#gallery-golf img', '#faq .card', '#contact .card', 'footer'
     ].join(',');
 
     const items = Array.from(document.querySelectorAll(sel));
@@ -549,7 +584,7 @@
     function setError(input, msg){ const err = input.nextElementSibling; if (err) err.textContent = msg || ''; }
     function validate(){
       let ok = true;
-      const req = ['name','email','date','time'];
+      const req = ['name','email','date','time','package'];
       req.forEach(id=>{
         const el = document.getElementById(id);
         if (!el) return;
@@ -619,15 +654,24 @@
     })();
 
     // Auth state változás figyelése
-    supabase.auth.onAuthStateChange(async (_event, session) => {
+    supabase.auth.onAuthStateChange((_event, session) => {
       renderUser(session?.user || null);
     });
 
-    // Kijelentkezés
-    logoutBtn?.addEventListener('click', async (e) => {
+    // Kijelentkezés – delegált kezelő (akkor is működik, ha a gomb rejtettből láthatóvá válik)
+    document.addEventListener('click', async (e) => {
+      const target = e.target.closest?.('#logout-btn');
+      if (!target) return;
       e.preventDefault();
-      await supabase.auth.signOut();
-      renderUser(null);
+      try{
+        const { error } = await supabase.auth.signOut();
+        if (error) throw error;
+        renderUser(null);
+        // opcionális visszajelzés
+        // alert('Kijelentkeztél.');
+      }catch(err){
+        alert('Kijelentkezés sikertelen: ' + (err?.message || err));
+      }
     });
 
     // Bejelentkezés
@@ -644,7 +688,6 @@
       } else {
         loginStatus.textContent = 'Sikeres belépés!';
         loginStatus.hidden = false;
-        // Zárjuk a modált és frissítsük a fejlécet
         window.__authModal?.close?.();
       }
     });
@@ -656,7 +699,6 @@
       e.preventDefault();
       const email = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
-      // Ide a tényleges, engedélyezett redirect URL-ed kell
       const redirectTo = window.location.origin + '/vr-szoba/';
       const { error } = await supabase.auth.signUp({
         email, password,
@@ -679,9 +721,7 @@
       if (token_hash && type){
         const { error } = await supabase.auth.verifyOtp({ token_hash, type });
         if (!error){
-          // siker — távolítsuk el a queryt a címsorból
           history.replaceState({}, '', window.location.pathname);
-          // frissítsük az UI-t a jelenlegi userrel
           const { data: { user } } = await supabase.auth.getUser();
           renderUser(user || null);
         } else {
