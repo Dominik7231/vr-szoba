@@ -60,12 +60,35 @@
       background: color-mix(in srgb, var(--bg), transparent 70%);
       border-bottom:1px solid var(--border);
     }
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:.7rem 0}
+
+    /* NAV – FIX: ne lógjon össze, törjön sorba szépen */
+    .nav{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:.7rem 0;
+      gap:.75rem 1rem;          /* vízszintes + függőleges rés a sorok között */
+      flex-wrap:wrap;           /* ha kevés a hely, a menü leugrik egy 2. sorba */
+    }
     .brand{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;font-weight:800}
+    .brand span{white-space:nowrap}   /* a logó melletti hosszú név ne törjön */
     .brand-logo{width:28px;height:28px;border-radius:.6rem;object-fit:cover;display:block;box-shadow:var(--shadow)}
-    .menu{display:flex;align-items:center;gap:1rem}
+
+    .menu{
+      display:flex;align-items:center;
+      gap:.75rem 1rem;
+      flex-wrap:wrap;                   /* menüpontok törhetnek következő sorba */
+      flex:1 1 520px;                   /* rugalmas szélesség, alapból tág hely */
+      justify-content:flex-end;         /* jobbra zár a sor(ok)ban */
+    }
+    .menu > a, .menu .btn, #user-chip{white-space:nowrap} /* egy-egy pont ne törjön két sorba */
     .menu a{opacity:.9;text-decoration:none}
     .menu a:hover{opacity:1}
+    .menu .btn{ padding:.55rem .85rem } /* kicsit karcsúbb gombok a fejléchez */
+
+    /* Ha valaki desktopon már kinyitotta a mobilmenüt, visszaváltásnál legyen látható a flex menü */
+    @media (min-width:821px){
+      #site-menu{display:flex !important; position:static}
+    }
+
     .nav-toggle{display:none;border:1px solid var(--border);background:transparent;color:var(--text);border-radius:.6rem;padding:.35rem .55rem}
 
     .btn{display:inline-block;padding:.75rem 1rem;border-radius:.9rem;border:1px solid var(--border);text-decoration:none;font-weight:700;box-shadow:var(--shadow)}
