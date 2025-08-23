@@ -99,7 +99,7 @@
     .reveal.show{opacity:1; transform:none;}
     @media (prefers-reduced-motion: reduce){ .reveal{transition:none} }
 
-    /* --- MODÁLOK (nyitási értesítő + auth) --- */
+    /* --- MODÁLOK (nyitási értesítő + auth + profil) --- */
     body.modal-open{overflow:hidden}
     .backdrop[hidden]{display:none}
     .backdrop{position:fixed; inset:0; z-index:1000; display:grid; place-items:center; background:rgba(8,10,20,.68); backdrop-filter:blur(10px); opacity:0; pointer-events:none; transition:opacity .25s ease;}
@@ -171,10 +171,34 @@
             <input id="signup-password" name="password" type="password" placeholder="Min. 6 karakter" autocomplete="new-password" required>
             <small class="error"></small>
           </div>
+          <div class="field">
+            <label for="signup-username">Felhasználónév</label>
+            <input id="signup-username" name="username" type="text" placeholder="pl. player123" autocomplete="nickname" minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]{3,20}">
+            <small class="error">3–20 karakter, csak betű/szám/„_”.</small>
+          </div>
           <button class="btn btn-primary" type="submit">Regisztrálok</button>
           <p id="signup-status" class="status" hidden></p>
         </form>
       </div>
+    </div>
+  </div>
+
+  <!-- PROFIL MODÁL (felhasználónév beállítás/módosítás) -->
+  <div id="profile-modal" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="profile-title" hidden>
+    <div class="modal-card">
+      <button class="modal-close" type="button" aria-label="Bezárás" data-close>✕</button>
+      <h2 id="profile-title" class="modal-title">Profil</h2>
+      <p class="modal-text">Itt tudod megadni vagy módosítani a felhasználóneved.</p>
+
+      <form id="profile-form" class="form" novalidate>
+        <div class="field">
+          <label for="profile-username">Felhasználónév</label>
+          <input id="profile-username" type="text" placeholder="pl. player123" autocomplete="nickname" minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]{3,20}" required>
+          <small class="error">3–20 karakter, csak betű/szám/„_”.</small>
+        </div>
+        <button class="btn btn-primary" type="submit">Mentés</button>
+        <p id="profile-status" class="status" hidden></p>
+      </form>
     </div>
   </div>
 
@@ -198,8 +222,9 @@
         <a href="#contact">Kapcsolat</a>
 
         <!-- Auth UI -->
-        <span id="user-chip" class="btn btn-ghost" hidden>Belépve: <strong id="user-email"></strong></span>
+        <span id="user-chip" class="btn btn-ghost" hidden>Szia, <strong id="display-name"></strong></span>
         <a class="btn btn-ghost" href="#" id="open-auth">Belépés</a>
+        <a class="btn btn-ghost" href="#" id="open-profile" hidden>Profil</a>
         <a class="btn btn-ghost" href="#" id="logout-btn" hidden>Kijelentkezés</a>
 
         <a class="btn btn-primary" href="#booking">Foglalás</a>
@@ -534,7 +559,7 @@
     }
   </script>
 
-  <!-- Modálok (nyitás értesítő + auth) -->
+  <!-- Modálok (nyitás értesítő + auth + profil) -->
   <script>
   (() => {
     function wireModal(rootId, onOpen){
@@ -555,6 +580,10 @@
     // Auth modál
     const auth = wireModal('auth-modal');
     document.getElementById('open-auth')?.addEventListener('click', (e)=>{ e.preventDefault(); auth && auth.open(); });
+
+    // Profil modál
+    const profile = wireModal('profile-modal');
+    window.__profileModal = profile; // elérhető más scriptekből is
 
     // Auth tabok
     const tabLogin = document.getElementById('tab-login');
@@ -623,7 +652,7 @@
   })();
   </script>
 
-  <!-- Supabase auth -->
+  <!-- Supabase auth + felhasználónév -->
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -632,21 +661,29 @@
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
 
     // Fejléc elemek
-    const openAuthBtn = document.getElementById('open-auth');
-    const logoutBtn = document.getElementById('logout-btn');
-    const userChip = document.getElementById('user-chip');
-    const userEmailEl = document.getElementById('user-email');
+    const openAuthBtn   = document.getElementById('open-auth');
+    const openProfileBtn= document.getElementById('open-profile');
+    const logoutBtn     = document.getElementById('logout-btn');
+    const userChip      = document.getElementById('user-chip');
+    const displayNameEl = document.getElementById('display-name');
+
+    function getDisplayName(user){
+      const uname = user?.user_metadata?.username;
+      return (uname && String(uname).trim()) ? uname.trim() : (user?.email || '');
+    }
 
     function renderUser(user){
-      if (user && user.email){
-        userEmailEl.textContent = user.email;
+      if (user && (user.email || user.user_metadata)){
+        displayNameEl.textContent = getDisplayName(user);
         userChip.hidden = false;
         logoutBtn.hidden = false;
+        openProfileBtn.hidden = false;
         openAuthBtn.hidden = true;
       } else {
-        userEmailEl.textContent = '';
+        displayNameEl.textContent = '';
         userChip.hidden = true;
         logoutBtn.hidden = true;
+        openProfileBtn.hidden = true;
         openAuthBtn.hidden = false;
       }
     }
@@ -663,15 +700,50 @@
       renderUser(session?.user || null);
     });
 
-    // Kijelentkezés – KÖZVETLEN handler a gombon
+    // Kijelentkezés – közvetlen handler
     logoutBtn?.addEventListener('click', async (e) => {
       e.preventDefault();
       try{
-        const { error } = await supabase.auth.signOut(); // hivatalos signOut hívás
+        const { error } = await supabase.auth.signOut();
         if (error) throw error;
         renderUser(null);
       }catch(err){
         alert('Kijelentkezés sikertelen: ' + (err?.message || err));
+      }
+    });
+
+    // PROFIL – megnyitás és előtöltés
+    document.getElementById('open-profile')?.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const { data: { user } } = await supabase.auth.getUser();
+      const input = document.getElementById('profile-username');
+      input.value = user?.user_metadata?.username || '';
+      window.__profileModal?.open?.();
+    });
+
+    // PROFIL – mentés (felhasználónév update user metadata-ben)
+    const profileForm   = document.getElementById('profile-form');
+    const profileStatus = document.getElementById('profile-status');
+    profileForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('profile-username').value.trim();
+      if (!/^[a-zA-Z0-9_]{3,20}$/.test(username)){
+        profileStatus.textContent = 'Érvénytelen felhasználónév. Csak betű/szám/„_”, 3–20 karakter.';
+        profileStatus.hidden = false;
+        return;
+      }
+      try{
+        const { error } = await supabase.auth.updateUser({ data: { username } });
+        if (error) throw error;
+        profileStatus.textContent = 'Mentve ✔';
+        profileStatus.hidden = false;
+        // Frissítsük a fejlécet a legújabb adatokkal
+        const { data: { user } } = await supabase.auth.getUser();
+        renderUser(user || null);
+        setTimeout(()=> window.__profileModal?.close?.(), 800);
+      }catch(err){
+        profileStatus.textContent = 'Hiba: ' + (err?.message || err);
+        profileStatus.hidden = false;
       }
     });
 
@@ -682,7 +754,7 @@
       e.preventDefault();
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value;
-      const { error } = await supabase.auth.signInWithPassword({ email, password }); // v2 API
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error){
         loginStatus.textContent = 'Hiba: ' + error.message;
         loginStatus.hidden = false;
@@ -693,17 +765,23 @@
       }
     });
 
-    // Regisztráció — e-mail megerősítést kér
+    // Regisztráció — felhasználónév metaadat + e-mail megerősítés
     const signupForm = document.getElementById('signup-form');
     const signupStatus = document.getElementById('signup-status');
     signupForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('signup-email').value.trim();
+      const email    = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value;
+      const username = document.getElementById('signup-username').value.trim();
+      if (username && !/^[a-zA-Z0-9_]{3,20}$/.test(username)){
+        signupStatus.textContent = 'Érvénytelen felhasználónév. Csak betű/szám/„_”, 3–20 karakter.';
+        signupStatus.hidden = false;
+        return;
+      }
       const redirectTo = window.location.origin + '/vr-szoba/';
       const { error } = await supabase.auth.signUp({
         email, password,
-        options: { emailRedirectTo: redirectTo }
+        options: { emailRedirectTo: redirectTo, data: username ? { username } : {} }
       });
       if (error){
         signupStatus.textContent = 'Hiba: ' + error.message;
@@ -720,7 +798,7 @@
       const token_hash = url.searchParams.get('token_hash');
       const type = url.searchParams.get('type'); // pl. "email"
       if (token_hash && type){
-        const { error } = await supabase.auth.verifyOtp({ token_hash, type }); // verifyOtp minta
+        const { error } = await supabase.auth.verifyOtp({ token_hash, type });
         if (!error){
           history.replaceState({}, '', window.location.pathname);
           const { data: { user } } = await supabase.auth.getUser();
@@ -774,3 +852,4 @@
   </script>
 </body>
 </html>
+
