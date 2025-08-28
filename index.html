@@ -51,6 +51,8 @@
     .container{width:min(1120px,92%); margin-inline:auto}
     a{color:inherit}
     img{max-width:100%; display:block}
+    /* Lightbox vizuális jelzés a kattintható képeken */
+    img.lightboxable{cursor:zoom-in}
 
     .skip{position:absolute;left:-9999px;top:auto;height:1px;width:1px;overflow:hidden}
     .skip:focus{position:static;height:auto;width:auto;padding:.5rem 1rem;background:var(--brand);color:#fff;border-radius:.5rem}
@@ -122,7 +124,7 @@
     .reveal.show{opacity:1; transform:none;}
     @media (prefers-reduced-motion: reduce){ .reveal{transition:none} }
 
-    /* --- MODÁLOK (nyitási értesítő + auth + profil) --- */
+    /* --- MODÁLOK (nyitási értesítő + auth + profil + LIGHTBOX) --- */
     body.modal-open{overflow:hidden}
     .backdrop[hidden]{display:none}
     .backdrop{position:fixed; inset:0; z-index:1000; display:grid; place-items:center; background:rgba(8,10,20,.68); backdrop-filter:blur(10px); opacity:0; pointer-events:none; transition:opacity .25s ease;}
@@ -135,6 +137,38 @@
     .tabs{display:flex; gap:.5rem; margin:.25rem 0 1rem}
     .tabs button{border:1px solid var(--border); background:transparent; color:var(--text); border-radius:.6rem; padding:.4rem .7rem; cursor:pointer}
     .tabs button[aria-selected="true"]{background:var(--brand); color:#fff; border-color:transparent}
+
+    /* LIGHTBOX egyedi stílusok */
+    .lightbox-card{
+      padding:0;
+      background:transparent;
+      border:none;
+      box-shadow:none;
+      width:min(96vw, 1200px);
+    }
+    .lightbox-figure{
+      margin:0;
+      display:grid;
+      gap:.6rem;
+      justify-items:center;
+    }
+    #lightbox-img{
+      display:block;
+      max-width:100%;
+      max-height:calc(100svh - 6rem);
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      border-radius:.9rem;
+      box-shadow:var(--shadow);
+      background:#0d0f17;
+    }
+    #lightbox-cap{
+      color:var(--muted);
+      text-align:center;
+      padding:0 .75rem 0 .75rem;
+      max-width:90ch;
+    }
 
     @media (max-width: 820px){
       .nav-toggle{display:inline-block}
@@ -222,6 +256,17 @@
         <button class="btn btn-primary" type="submit">Mentés</button>
         <p id="profile-status" class="status" hidden></p>
       </form>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODÁL (nagyított képekhez) -->
+  <div id="lightbox-modal" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="lightbox-cap" hidden>
+    <div class="modal-card lightbox-card">
+      <button class="modal-close" type="button" aria-label="Bezárás" data-close>✕</button>
+      <figure class="lightbox-figure">
+        <img id="lightbox-img" alt="">
+        <figcaption id="lightbox-cap" class="modal-text"></figcaption>
+      </figure>
     </div>
   </div>
 
@@ -409,7 +454,8 @@
               </div>
               <div class="field">
                 <label for="time">Idő</label>
-                <input id="time" name="time" type="time" required />
+                <!-- Korlátozás: csak 10:00–20:00 között -->
+                <input id="time" name="time" type="time" required min="10:00" max="20:00" step="900" />
                 <small class="error"></small>
               </div>
               <div class="field">
@@ -525,10 +571,7 @@
           <div class="card">
             <h3>Nyitvatartás</h3>
             <div style="display:grid;grid-template-columns:1fr auto;gap:.4rem;color:var(--muted)">
-              <span>H–Cs</span><span>14:00 – 21:00</span>
-              <span>P</span><span>14:00 – 23:00</span>
-              <span>Szo</span><span>10:00 – 23:00</span>
-              <span>V</span><span>10:00 – 20:00</span>
+              <span>H–V</span><span>10:00 – 20:00</span>
             </div>
           </div>
         </div>
@@ -582,7 +625,7 @@
     }
   </script>
 
-  <!-- Modálok (nyitás értesítő + auth + profil) -->
+  <!-- Modálok (nyitás értesítő + auth + profil + lightbox) -->
   <script>
   (() => {
     function wireModal(rootId, onOpen){
@@ -626,6 +669,41 @@
 
     // Exponáljuk a close-t más scripteknek
     window.__authModal = auth;
+
+    // -----------------------------
+    // LIGHTBOX: képek nagyítása
+    // -----------------------------
+    const lightbox = wireModal('lightbox-modal');
+    const lbImg = document.getElementById('lightbox-img');
+    const lbCap = document.getElementById('lightbox-cap');
+
+    function openLightbox(src, altText){
+      if (!lightbox) return;
+      lbImg.src = src;
+      lbImg.alt = altText || '';
+      lbCap.textContent = altText || '';
+      lightbox.open();
+    }
+
+    // Minden kép, kivéve a fejléc logója
+    const imgs = document.querySelectorAll('img:not(.brand-logo)');
+    imgs.forEach(img => {
+      img.classList.add('lightboxable');
+      img.addEventListener('click', (e) => {
+        // ha linkben van a kép, ne navigáljon
+        e.preventDefault?.();
+        e.stopPropagation?.();
+        const full = img.dataset.full || img.currentSrc || img.src;
+        openLightbox(full, img.alt || '');
+      });
+    });
+
+    // Esc bezárás
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox && !lightbox.el.hidden){
+        lightbox.close();
+      }
+    });
   })();
   </script>
 
@@ -637,15 +715,33 @@
     if (!form) return;
 
     function setError(input, msg){ const err = input.nextElementSibling; if (err) err.textContent = msg || ''; }
+
+    function validTimeInRange(value){
+      // value formátum: "HH:MM"
+      const m = /^(\d{2}):(\d{2})$/.exec(value || '');
+      if (!m) return false;
+      const hh = Number(m[1]), mm = Number(m[2]);
+      if (hh<0 || hh>23 || mm<0 || mm>59) return false;
+      const minutes = hh*60 + mm;
+      return minutes >= 10*60 && minutes <= 20*60; // 10:00–20:00 (beleértve)
+    }
+
     function validate(){
       let ok = true;
       const req = ['name','email','date','time','package'];
       req.forEach(id=>{
         const el = document.getElementById(id);
         if (!el) return;
-        if (!el.value.trim()){ setError(el,'Kérlek töltsd ki ezt a mezőt.'); ok=false; }
-        else if (id==='email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value)){ setError(el,'Adj meg érvényes e-mail címet.'); ok=false; }
-        else setError(el,'');
+        if (!el.value.trim()){
+          setError(el,'Kérlek töltsd ki ezt a mezőt.'); ok=false;
+        } else if (id==='email' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(el.value)){
+          setError(el,'Adj meg érvényes e-mail címet.'); ok=false;
+        } else if (id==='time' && !validTimeInRange(el.value)){
+          setError(el,'Kérlek 10:00 és 20:00 közötti időpontot válassz.');
+          ok=false;
+        } else {
+          setError(el,'');
+        }
       });
       return ok;
     }
@@ -850,10 +946,12 @@
     "telephone": "+36 1 234 5678",
     "sameAs": [],
     "openingHoursSpecification": [
-      {"@type":"OpeningHoursSpecification","dayOfWeek":["Monday","Tuesday","Wednesday","Thursday"],"opens":"14:00","closes":"21:00"},
-      {"@type":"OpeningHoursSpecification","dayOfWeek":["Friday"],"opens":"14:00","closes":"23:00"},
-      {"@type":"OpeningHoursSpecification","dayOfWeek":["Saturday"],"opens":"10:00","closes":"23:00"},
-      {"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday"],"opens":"10:00","closes":"20:00"}
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],
+        "opens": "10:00",
+        "closes": "20:00"
+      }
     ]
   }
   </script>
