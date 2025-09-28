@@ -1,5 +1,5 @@
 // sw.js — UVR (network-first HTML + auto-reload)
-const VERSION = "vr-szoba-v11"; // bump, hogy minden kliens frissüljön
+const VERSION = "vr-szoba-v12"; // verziólépés a Quest 3 kép miatt
 const STATIC_CACHE = `static-${VERSION}`;
 const PAGES_CACHE  = `pages-${VERSION}`;
 
@@ -13,7 +13,7 @@ const ASSETS = [
   "/vr-szoba/icon-192.png",
   "/vr-szoba/icon-512.png",
 
-  // VR galéria (a HTML ?v=7-et használ; itt a query nélküli fájl precache-ben)
+  // VR galéria
   "/vr-szoba/szoba-led.jpg",
   "/vr-szoba/szoba-feher.jpg",
   "/vr-szoba/szoba-fa.jpg",
@@ -24,7 +24,10 @@ const ASSETS = [
   "/vr-szoba/buvar.jpeg",
   "/vr-szoba/capa.jpeg",
   "/vr-szoba/hajo.jpeg",
-  "/vr-szoba/teknos.jpeg"
+  "/vr-szoba/teknos.jpeg",
+
+  // ÚJ: Quest 3 bemutató kép
+  "/vr-szoba/quest3.jpg"
 ];
 
 self.addEventListener("install", (e) => {
@@ -45,7 +48,7 @@ self.addEventListener("activate", (e) => {
   self.clients.claim();
 });
 
-// HTML: network-first; képek: cache-first; CSS/JS: S-W-R; egyéb: próbál fetch, majd cache fallback
+// HTML: network-first; képek: cache-first; CSS/JS: S-W-R; egyéb: fetch → cache fallback
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
@@ -84,5 +87,3 @@ async function staleWhileRevalidate(cacheName, req) {
   const networkPromise = fetch(req).then((resp) => { cache.put(req, resp.clone()); return resp; });
   return cached || networkPromise;
 }
-
-
