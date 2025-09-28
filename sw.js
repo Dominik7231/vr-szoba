@@ -1,5 +1,5 @@
 // sw.js — UVR (network-first HTML + auto-reload)
-const VERSION = "vr-szoba-v10"; // bump, hogy az új .jpeg képek is frissüljenek
+const VERSION = "vr-szoba-v11"; // bump, hogy minden kliens frissüljön
 const STATIC_CACHE = `static-${VERSION}`;
 const PAGES_CACHE  = `pages-${VERSION}`;
 
@@ -13,13 +13,13 @@ const ASSETS = [
   "/vr-szoba/icon-192.png",
   "/vr-szoba/icon-512.png",
 
-  // VR galéria (a HTML továbbra is ?v=7-et használ)
+  // VR galéria (a HTML ?v=7-et használ; itt a query nélküli fájl precache-ben)
   "/vr-szoba/szoba-led.jpg",
   "/vr-szoba/szoba-feher.jpg",
   "/vr-szoba/szoba-fa.jpg",
   "/vr-szoba/szoba-neon.jpg",
 
-  // UV Minigolf új képek — .jpeg
+  // UV Minigolf képek — .jpeg
   "/vr-szoba/balna.jpeg",
   "/vr-szoba/buvar.jpeg",
   "/vr-szoba/capa.jpeg",
@@ -35,20 +35,26 @@ self.addEventListener("install", (e) => {
 self.addEventListener("activate", (e) => {
   e.waitUntil(
     caches.keys().then(keys =>
-      Promise.all(keys.filter(k => ![STATIC_CACHE, PAGES_CACHE].includes(k)).map(k => caches.delete(k)))
+      Promise.all(
+        keys
+          .filter(k => ![STATIC_CACHE, PAGES_CACHE].includes(k))
+          .map(k => caches.delete(k))
+      )
     )
   );
   self.clients.claim();
 });
 
-// HTML: network-first; képek: cache-first; CSS/JS: S-W-R
+// HTML: network-first; képek: cache-first; CSS/JS: S-W-R; egyéb: próbál fetch, majd cache fallback
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   const url = new URL(req.url);
   const isHTML = req.mode === "navigate" || (req.headers.get("accept") || "").includes("text/html");
+
   if (isHTML) { e.respondWith(networkFirst(req)); return; }
   if (/\.(png|jpe?g|webp|svg)$/i.test(url.pathname)) { e.respondWith(cacheFirst(STATIC_CACHE, req)); return; }
   if (/\.(css|js)$/i.test(url.pathname)) { e.respondWith(staleWhileRevalidate(STATIC_CACHE, req)); return; }
+
   e.respondWith(fetch(req).catch(() => caches.match(req)));
 });
 
@@ -78,4 +84,5 @@ async function staleWhileRevalidate(cacheName, req) {
   const networkPromise = fetch(req).then((resp) => { cache.put(req, resp.clone()); return resp; });
   return cached || networkPromise;
 }
+
 
