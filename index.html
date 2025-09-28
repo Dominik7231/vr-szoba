@@ -354,6 +354,116 @@
             <a class="btn btn-primary" href="#booking">Foglalok</a>
           </article>
         </div>
+
+        <h3>UV Minigolf csomagok</h3>
+        <div class="grid pricing">
+          <article class="card">
+            <h4>Alap Minigolf</h4>
+            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">2 990 Ft / fő / 1 kör</p>
+            <ul style="margin:0 0 .8rem 1.1rem">
+              <li>Neonos pálya</li><li>Világító labdák</li><li>Alap pontlap</li>
+            </ul>
+            <a class="btn btn-primary" href="#booking">Foglalok</a>
+          </article>
+          <article class="card">
+            <h4>Csapat Minigolf</h4>
+            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">1,5 óra / zártkörű pálya</p>
+            <ul style="margin:0 0 .8rem 1.1rem">
+              <li>Max 12 fő</li><li>Bajnokság pontozólappal</li><li>Fotózás</li>
+            </ul>
+            <a class="btn btn-primary" href="#booking">Időpontot kérek</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOGALÁS / KAPCSOLAT – VISSZATÉRŐ ŰRLAP -->
+    <section id="booking" class="section">
+      <div class="container">
+        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
+          <!-- FormSubmit: AJAX beküldés, maradunk az oldalon -->
+          <form id="contact-form" class="card form" action="https://formsubmit.co/ajax/dobosdomi09@gmail.com" method="POST" accept-charset="UTF-8">
+            <input type="hidden" name="_subject" value="Új foglalási kérés – VR/Minigolf">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="_captcha" value="false">
+            <input type="text" name="_honey" style="display:none">
+
+            <div class="field">
+              <label for="name">Név</label>
+              <input id="name" name="name" type="text" required placeholder="Teljes neved" autocomplete="name" />
+              <small class="error" aria-live="polite"></small>
+            </div>
+            <div class="field">
+              <label for="email">E-mail</label>
+              <input id="email" name="email" type="email" required placeholder="te@pelda.hu" autocomplete="email" />
+              <small class="error" aria-live="polite"></small>
+            </div>
+
+            <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:.75rem">
+              <div class="field">
+                <label for="date">Dátum</label>
+                <input id="date" name="date" type="date" required />
+                <small class="error"></small>
+              </div>
+              <div class="field">
+                <label for="time">Idő</label>
+                <!-- Korlátozás: csak 10:00–20:00 között -->
+                <input id="time" name="time" type="time" required min="10:00" max="20:00" step="900" />
+                <small class="error"></small>
+              </div>
+              <div class="field">
+                <label for="people">Létszám</label>
+                <input id="people" name="people" type="number" min="1" max="12" value="4" />
+                <small class="error"></small>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="package">Csomag</label>
+              <select id="package" name="package" required>
+                <option value="">Válassz csomagot…</option>
+                <optgroup label="VR">
+                  <option value="Alap VR">Alap VR</option>
+                  <option value="Csapat VR">Csapat VR</option>
+                </optgroup>
+                <optgroup label="UV Minigolf">
+                  <option value="Alap Minigolf">Alap Minigolf</option>
+                  <option value="Csapat Minigolf">Csapat Minigolf</option>
+                </optgroup>
+                <optgroup label="Esemény">
+                  <option value="Party csomag">Party csomag</option>
+                </optgroup>
+              </select>
+              <small class="error"></small>
+            </div>
+
+            <div class="field">
+              <label for="message">Megjegyzés</label>
+              <textarea id="message" name="message" rows="4" placeholder="Extra infó: szülinap, csapatépítés, külön kérés…"></textarea>
+              <small class="error"></small>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
+            <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e-mailben.</p>
+          </form>
+
+          <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
+            <h3 style="color:var(--text);margin:0">Hasznos tudnivalók</h3>
+            <ul style="margin:0 0 .2rem 1.1rem">
+              <li>Érkezzetek 10 perccel előbb a rövid eligazítás miatt.</li>
+              <li>Kényelmes ruházat ajánlott. Szemüveggel is használható.</li>
+              <li>14 éves kor alatt kísérő szükséges.</li>
+              <li>Lemondás: 24 órával előre díjmentes.</li>
+            </ul>
+            <div style="display:grid;gap:.35rem;font-size:.95rem">
+              <div>📞 <a href="tel:+3612345678">+36 1 234 5678</a></div>
+              <div>✉️ <a href="mailto:hello@vrszoba.hu">hello@vrszoba.hu</a></div>
+              <div>📍 6000 Kecskemét, Korhánközi u. 10/A</div>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
 
@@ -371,7 +481,7 @@
       </div>
     </section>
 
-    <!-- UV Minigolf Galéria – ÚJ .jpeg képek -->
+    <!-- UV Minigolf Galéria – .jpeg képek -->
     <section id="gallery-golf" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">UV Minigolf képek</h2>
@@ -439,6 +549,7 @@
       '#hero-vr .badge', '#hero-vr h1', '#hero-vr p', '#hero-vr .actions',
       '#hero-golf .badge', '#hero-golf h2', '#hero-golf p', '#hero-golf .actions',
       '#news .card', '#features .card', '#packages .card',
+      '#booking form', '#booking aside',
       '#gallery img', '#gallery-golf img', '#faq .card', '#contact .card', 'footer'
     ].join(',');
 
@@ -544,7 +655,7 @@
   })();
   </script>
 
-  <!-- FormSubmit AJAX -->
+  <!-- FormSubmit AJAX (űrlap validáció + beküldés) -->
   <script>
   (() => {
     const form = document.getElementById('contact-form');
@@ -559,7 +670,7 @@
       const hh = Number(m[1]), mm = Number(m[2]);
       if (hh<0 || hh>23 || mm<0 || mm>59) return false;
       const minutes = hh*60 + mm;
-      return minutes >= 10*60 && minutes <= 20*60;
+      return minutes >= 10*60 && minutes <= 20*60; // 10:00–20:00
     }
 
     function validate(){
@@ -799,6 +910,3 @@
   </script>
 </body>
 </html>
-
-
-
