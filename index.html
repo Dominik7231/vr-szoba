@@ -253,6 +253,7 @@
         <a href="#hero-golf">UV Minigolf</a>
         <a href="#news">Újdonságok</a>
         <a href="#packages">Csomagok</a>
+        <a href="#quest3">Quest 3</a>
         <a href="#faq">GYIK</a>
         <a href="#gallery">Galéria</a>
         <a href="#contact">Kapcsolat</a>
@@ -308,6 +309,38 @@
           <article class="card"><h3>⭐ Halloweeni UV hétvége</h3><p>Tematikus pályafények és jelmezverseny. Okt. 31–Nov. 3.</p></article>
           <article class="card"><h3>🎮 Új VR-játékok</h3><p>Kooperatív túlélős és ritmusjáték érkezett — próbáld ki!</p></article>
           <article class="card"><h3>🎁 Ajándékutalványok</h3><p>Megérkeztek az ünnepi ajándékkártyák — kérd egyedi üzenettel.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quest 3 bemutató (ÚJ) -->
+    <section id="quest3" class="section alt">
+      <div class="container">
+        <h2 style="margin:0 0 .6rem;font-size:clamp(1.6rem,3vw,2.2rem)">Érkezik a Quest 3 a UVR-be</h2>
+        <p style="color:var(--muted);max-width:65ch;margin:.25rem 0 1.2rem">
+          Következő generációs VR a még tisztább képért és stabilabb követésért. Próbáld ki nálunk
+          az első között Kecskeméten!
+        </p>
+
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));align-items:start">
+          <figure class="card" style="padding:.6rem">
+            <img class="thumb-img" src="quest3.jpg" alt="Meta Quest 3 VR headset — előlnézet" loading="lazy">
+            <figcaption style="color:var(--muted);padding:.4rem .4rem 0">A képen: Quest 3 headset</figcaption>
+          </figure>
+
+          <article class="card" style="display:grid;gap:.6rem">
+            <h3 style="margin:.2rem 0">Miért lesz jobb?</h3>
+            <ul style="margin:0 0 0 1.1rem">
+              <li>Élesebb kép, gyorsabb panel — még kevesebb elmosódás.</li>
+              <li>Pontosabb követés és kényelmesebb illeszkedés.</li>
+              <li>Vékonyabb kialakítás, jobb szellőzés hosszabb játékhoz.</li>
+              <li>Stabil többjátékos élmény csapatoknak és partikra.</li>
+            </ul>
+            <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.4rem">
+              <a class="btn btn-primary" href="#booking">Lefoglalom a kipróbálást</a>
+              <a class="btn btn-ghost" href="#gallery">VR képek</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -377,13 +410,12 @@
       </div>
     </section>
 
-    <!-- FOGALÁS / KAPCSOLAT – VISSZATÉRŐ ŰRLAP -->
+    <!-- FOGALÁS / KAPCSOLAT – ŰRLAP -->
     <section id="booking" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-          <!-- FormSubmit: AJAX beküldés, maradunk az oldalon -->
           <form id="contact-form" class="card form" action="https://formsubmit.co/ajax/dobosdomi09@gmail.com" method="POST" accept-charset="UTF-8">
             <input type="hidden" name="_subject" value="Új foglalási kérés – VR/Minigolf">
             <input type="hidden" name="_template" value="table">
@@ -409,7 +441,6 @@
               </div>
               <div class="field">
                 <label for="time">Idő</label>
-                <!-- Korlátozás: csak 10:00–20:00 között -->
                 <input id="time" name="time" type="time" required min="10:00" max="20:00" step="900" />
                 <small class="error"></small>
               </div>
@@ -481,7 +512,7 @@
       </div>
     </section>
 
-    <!-- UV Minigolf Galéria – .jpeg képek -->
+    <!-- UV Minigolf Galéria -->
     <section id="gallery-golf" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">UV Minigolf képek</h2>
@@ -548,7 +579,9 @@
     const sel = [
       '#hero-vr .badge', '#hero-vr h1', '#hero-vr p', '#hero-vr .actions',
       '#hero-golf .badge', '#hero-golf h2', '#hero-golf p', '#hero-golf .actions',
-      '#news .card', '#features .card', '#packages .card',
+      '#news .card',
+      '#quest3 .card', '#quest3 img', '#quest3 li',
+      '#features .card', '#packages .card',
       '#booking form', '#booking aside',
       '#gallery img', '#gallery-golf img', '#faq .card', '#contact .card', 'footer'
     ].join(',');
@@ -655,7 +688,7 @@
   })();
   </script>
 
-  <!-- FormSubmit AJAX (űrlap validáció + beküldés) -->
+  <!-- FormSubmit AJAX -->
   <script>
   (() => {
     const form = document.getElementById('contact-form');
@@ -670,7 +703,7 @@
       const hh = Number(m[1]), mm = Number(m[2]);
       if (hh<0 || hh>23 || mm<0 || mm>59) return false;
       const minutes = hh*60 + mm;
-      return minutes >= 10*60 && minutes <= 20*60; // 10:00–20:00
+      return minutes >= 10*60 && minutes <= 20*60;
     }
 
     function validate(){
