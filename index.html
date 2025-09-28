@@ -40,7 +40,6 @@
     }
     *{box-sizing:border-box}
     html,body{height:100%}
-    /* Fontos: semmi se törje meg a hidden-t */
     [hidden]{display:none!important}
 
     body{
@@ -51,7 +50,6 @@
     .container{width:min(1120px,92%); margin-inline:auto}
     a{color:inherit}
     img{max-width:100%; display:block}
-    /* Lightbox vizuális jelzés a kattintható képeken */
     img.lightboxable{cursor:zoom-in}
 
     .skip{position:absolute;left:-9999px;top:auto;height:1px;width:1px;overflow:hidden}
@@ -63,30 +61,28 @@
       border-bottom:1px solid var(--border);
     }
 
-    /* NAV – FIX: ne lógjon össze, törjön sorba szépen */
     .nav{
       display:flex;align-items:center;justify-content:space-between;
       padding:.7rem 0;
-      gap:.75rem 1rem;          /* vízszintes + függőleges rés a sorok között */
-      flex-wrap:wrap;           /* ha kevés a hely, a menü leugrik egy 2. sorba */
+      gap:.75rem 1rem;
+      flex-wrap:wrap;
     }
     .brand{display:inline-flex;align-items:center;gap:.6rem;text-decoration:none;font-weight:800}
-    .brand span{white-space:nowrap}   /* a logó melletti hosszú név ne törjön */
+    .brand span{white-space:nowrap}
     .brand-logo{width:28px;height:28px;border-radius:.6rem;object-fit:cover;display:block;box-shadow:var(--shadow)}
 
     .menu{
       display:flex;align-items:center;
       gap:.75rem 1rem;
-      flex-wrap:wrap;                   /* menüpontok törhetnek következő sorba */
-      flex:1 1 520px;                   /* rugalmas szélesség, alapból tág hely */
-      justify-content:flex-end;         /* jobbra zár a sor(ok)ban */
+      flex-wrap:wrap;
+      flex:1 1 520px;
+      justify-content:flex-end;
     }
-    .menu > a, .menu .btn, #user-chip{white-space:nowrap} /* egy-egy pont ne törjön két sorba */
+    .menu > a, .menu .btn, #user-chip{white-space:nowrap}
     .menu a{opacity:.9;text-decoration:none}
     .menu a:hover{opacity:1}
-    .menu .btn{ padding:.55rem .85rem } /* kicsit karcsúbb gombok a fejléchez */
+    .menu .btn{ padding:.55rem .85rem }
 
-    /* Ha valaki desktopon már kinyitotta a mobilmenüt, visszaváltásnál legyen látható a flex menü */
     @media (min-width:821px){
       #site-menu{display:flex !important; position:static}
     }
@@ -120,11 +116,10 @@
     .thumb-img{aspect-ratio:16/9; width:100%; height:auto; border:1px solid var(--border); border-radius:1rem; object-fit:cover; background:#0d0f17}
     footer{border-top:1px solid var(--border);padding:1.2rem 0;text-align:center;color:var(--muted)}
 
-    .reveal{opacity:0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; will-change: opacity, transform;}
+    .reveal{opacity:0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease;}
     .reveal.show{opacity:1; transform:none;}
     @media (prefers-reduced-motion: reduce){ .reveal{transition:none} }
 
-    /* --- MODÁLOK (nyitási értesítő + auth + profil + LIGHTBOX) --- */
     body.modal-open{overflow:hidden}
     .backdrop[hidden]{display:none}
     .backdrop{position:fixed; inset:0; z-index:1000; display:grid; place-items:center; background:rgba(8,10,20,.68); backdrop-filter:blur(10px); opacity:0; pointer-events:none; transition:opacity .25s ease;}
@@ -132,43 +127,16 @@
     .modal-card{background:var(--surface); border:1px solid var(--border); border-radius:1rem; padding:1.25rem; width:min(560px,92%); box-shadow:var(--shadow); position:relative;}
     .modal-title{margin:0 2.2rem .5rem 0; font-size:clamp(1.2rem,2.6vw,1.6rem)}
     .modal-text{color:var(--muted); margin:.25rem 0 0}
-    .modal-close{position:absolute; top:.55rem; right:.55rem; border:1px solid var(--border); background:transparent; color:var(--text); border-radius:.6rem; padding:.3rem .55rem; font:inherit; line-height:1; cursor:pointer;}
+    .modal-close{position:absolute; top:.55rem; right:.55rem; border:1px solid var(--border); background:transparent; color:var(--text); border-radius:.6rem; padding:.3rem .55rem; font:inherit; cursor:pointer;}
 
     .tabs{display:flex; gap:.5rem; margin:.25rem 0 1rem}
     .tabs button{border:1px solid var(--border); background:transparent; color:var(--text); border-radius:.6rem; padding:.4rem .7rem; cursor:pointer}
     .tabs button[aria-selected="true"]{background:var(--brand); color:#fff; border-color:transparent}
 
-    /* LIGHTBOX egyedi stílusok */
-    .lightbox-card{
-      padding:0;
-      background:transparent;
-      border:none;
-      box-shadow:none;
-      width:min(96vw, 1200px);
-    }
-    .lightbox-figure{
-      margin:0;
-      display:grid;
-      gap:.6rem;
-      justify-items:center;
-    }
-    #lightbox-img{
-      display:block;
-      max-width:100%;
-      max-height:calc(100svh - 6rem);
-      width:auto;
-      height:auto;
-      object-fit:contain;
-      border-radius:.9rem;
-      box-shadow:var(--shadow);
-      background:#0d0f17;
-    }
-    #lightbox-cap{
-      color:var(--muted);
-      text-align:center;
-      padding:0 .75rem 0 .75rem;
-      max-width:90ch;
-    }
+    .lightbox-card{ padding:0; background:transparent; border:none; box-shadow:none; width:min(96vw, 1200px); }
+    .lightbox-figure{ margin:0; display:grid; gap:.6rem; justify-items:center; }
+    #lightbox-img{ display:block; max-width:100%; max-height:calc(100svh - 6rem); width:auto; height:auto; object-fit:contain; border-radius:.9rem; box-shadow:var(--shadow); background:#0d0f17; }
+    #lightbox-cap{ color:var(--muted); text-align:center; padding:0 .75rem; max-width:90ch; }
 
     @media (max-width: 820px){
       .nav-toggle{display:inline-block}
@@ -188,7 +156,7 @@
     </div>
   </div>
 
-  <!-- AUTH MODÁL (Regisztráció / Bejelentkezés) -->
+  <!-- AUTH MODÁL -->
   <div id="auth-modal" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="auth-title" hidden>
     <div class="modal-card">
       <button class="modal-close" type="button" aria-label="Bezárás" data-close>✕</button>
@@ -240,7 +208,7 @@
     </div>
   </div>
 
-  <!-- PROFIL MODÁL (felhasználónév beállítás/módosítás) -->
+  <!-- PROFIL MODÁL -->
   <div id="profile-modal" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="profile-title" hidden>
     <div class="modal-card">
       <button class="modal-close" type="button" aria-label="Bezárás" data-close>✕</button>
@@ -259,7 +227,7 @@
     </div>
   </div>
 
-  <!-- LIGHTBOX MODÁL (nagyított képekhez) -->
+  <!-- LIGHTBOX MODÁL -->
   <div id="lightbox-modal" class="backdrop" role="dialog" aria-modal="true" aria-labelledby="lightbox-cap" hidden>
     <div class="modal-card lightbox-card">
       <button class="modal-close" type="button" aria-label="Bezárás" data-close>✕</button>
@@ -289,7 +257,6 @@
         <a href="#gallery">Galéria</a>
         <a href="#contact">Kapcsolat</a>
 
-        <!-- Auth UI -->
         <span id="user-chip" class="btn btn-ghost" hidden>Szia, <strong id="display-name"></strong></span>
         <a class="btn btn-ghost" href="#" id="open-auth">Belépés</a>
         <a class="btn btn-ghost" href="#" id="open-profile" hidden>Profil</a>
@@ -345,7 +312,7 @@
       </div>
     </section>
 
-    <!-- Features (VR) -->
+    <!-- Features -->
     <section id="features" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Minden a felejthetetlen VR-élményért</h2>
@@ -387,128 +354,6 @@
             <a class="btn btn-primary" href="#booking">Foglalok</a>
           </article>
         </div>
-
-        <h3>UV Minigolf csomagok</h3>
-        <div class="grid pricing">
-          <article class="card">
-            <h4>Alap Minigolf</h4>
-            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">2 990 Ft / fő / 1 kör</p>
-            <ul style="margin:0 0 .8rem 1.1rem">
-              <li>Neonos pálya</li><li>Világító labdák</li><li>Alap pontlap</li>
-            </ul>
-            <a class="btn btn-primary" href="#booking">Foglalok</a>
-          </article>
-          <article class="card">
-            <h4>Csapat Minigolf</h4>
-            <p style="font-weight:800;font-size:1.05rem;margin:.25rem 0 .5rem">1,5 óra / zártkörű pálya</p>
-            <ul style="margin:0 0 .8rem 1.1rem">
-              <li>Max 12 fő</li><li>Bajnokság pontozólappal</li><li>Fotózás</li>
-            </ul>
-            <a class="btn btn-primary" href="#booking">Időpontot kérek</a>
-          </article>
-        </div>
-
-        <h3 style="margin-top:2rem">Szülinap / Csapatépítés</h3>
-        <div class="grid pricing">
-          <article class="card">
-            <h4>Party csomag</h4>
-            <p style="font-weight:800">3 óra / egyedi program</p>
-            <ul style="margin:0 0 .8rem 1.1rem">
-              <li>VR + Minigolf kombináció</li><li>Zártkörű használat</li><li>Snack + üdítő opció</li>
-            </ul>
-            <a class="btn btn-primary" href="#booking">Ajánlatot kérek</a>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Foglalás / Kapcsolat -->
-    <section id="booking" class="section">
-      <div class="container">
-        <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">Foglalj időpontot</h2>
-        <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Töltsd ki az űrlapot, és nyitvatartásban 1–2 órán belül visszaigazolunk.</p>
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr))">
-          <!-- FormSubmit: AJAX beküldés, nincs külső “Thanks” oldal -->
-          <form id="contact-form" class="card form" action="https://formsubmit.co/ajax/dobosdomi09@gmail.com" method="POST" accept-charset="UTF-8">
-            <input type="hidden" name="_subject" value="Új foglalási kérés – VR/Minigolf">
-            <input type="hidden" name="_template" value="table">
-            <input type="hidden" name="_captcha" value="false">
-            <input type="text" name="_honey" style="display:none">
-
-            <div class="field">
-              <label for="name">Név</label>
-              <input id="name" name="name" type="text" required placeholder="Teljes neved" autocomplete="name" />
-              <small class="error" aria-live="polite"></small>
-            </div>
-            <div class="field">
-              <label for="email">E-mail</label>
-              <input id="email" name="email" type="email" required placeholder="te@pelda.hu" autocomplete="email" />
-              <small class="error" aria-live="polite"></small>
-            </div>
-
-            <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:.75rem">
-              <div class="field">
-                <label for="date">Dátum</label>
-                <input id="date" name="date" type="date" required />
-                <small class="error"></small>
-              </div>
-              <div class="field">
-                <label for="time">Idő</label>
-                <!-- Korlátozás: csak 10:00–20:00 között -->
-                <input id="time" name="time" type="time" required min="10:00" max="20:00" step="900" />
-                <small class="error"></small>
-              </div>
-              <div class="field">
-                <label for="people">Létszám</label>
-                <input id="people" name="people" type="number" min="1" max="12" value="4" />
-                <small class="error"></small>
-              </div>
-            </div>
-
-            <div class="field">
-              <label for="package">Csomag</label>
-              <select id="package" name="package" required>
-                <option value="">Válassz csomagot…</option>
-                <optgroup label="VR">
-                  <option value="Alap VR">Alap VR</option>
-                  <option value="Csapat VR">Csapat VR</option>
-                </optgroup>
-                <optgroup label="UV Minigolf">
-                  <option value="Alap Minigolf">Alap Minigolf</option>
-                  <option value="Csapat Minigolf">Csapat Minigolf</option>
-                </optgroup>
-                <optgroup label="Esemény">
-                  <option value="Party csomag">Party csomag</option>
-                </optgroup>
-              </select>
-              <small class="error"></small>
-            </div>
-
-            <div class="field">
-              <label for="message">Megjegyzés</label>
-              <textarea id="message" name="message" rows="4" placeholder="Extra infó: szülinap, csapatépítés, külön kérés…"></textarea>
-              <small class="error"></small>
-            </div>
-
-            <button class="btn btn-primary" type="submit">Kérem a visszaigazolást</button>
-            <p id="form-status" role="status" class="status" hidden>Köszönjük! Hamarosan felvesszük veled a kapcsolatot e-mailben.</p>
-          </form>
-
-          <aside class="card" style="display:grid;gap:.75rem;align-content:start;color:var(--muted)">
-            <h3 style="color:var(--text);margin:0">Hasznos tudnivalók</h3>
-            <ul style="margin:0 0 .2rem 1.1rem">
-              <li>Érkezzetek 10 perccel előbb a rövid eligazítás miatt.</li>
-              <li>Kényelmes ruházat ajánlott. Szemüveggel is használható.</li>
-              <li>14 éves kor alatt kísérő szükséges.</li>
-              <li>Lemondás: 24 órával előre díjmentes.</li>
-            </ul>
-            <div style="display:grid;gap:.35rem;font-size:.95rem">
-              <div>📞 <a href="tel:+3612345678">+36 1 234 5678</a></div>
-              <div>✉️ <a href="mailto:hello@vrszoba.hu">hello@vrszoba.hu</a></div>
-              <div>📍 6000 Kecskemét, Korhánközi u. 10/A</div>
-            </div>
-          </aside>
-        </div>
       </div>
     </section>
 
@@ -526,15 +371,17 @@
       </div>
     </section>
 
-    <!-- UV Minigolf Galéria -->
+    <!-- UV Minigolf Galéria – ÚJ .jpeg képek -->
     <section id="gallery-golf" class="section">
       <div class="container">
         <h2 style="margin:0 0 .5rem;font-size:clamp(1.6rem,3vw,2.2rem)">UV Minigolf képek</h2>
         <p style="color:var(--muted);max-width:65ch;margin:.2rem 0 1.2rem">Neonos pálya, világító akadályok — minden korosztály imádja.</p>
         <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-          <img class="thumb-img" src="golf-1.jpg?v=7" alt="UV minigolf pálya neon vonalakkal" loading="lazy">
-          <img class="thumb-img" src="golf-2.jpg?v=7" alt="Minigolf ütés közelről, világító labda" loading="lazy">
-          <img class="thumb-img" src="golf-3.jpg?v=7" alt="Lyuk és akadályok lila-zöld fénnyel" loading="lazy">
+          <img class="thumb-img" src="balna.jpeg"  alt="UV minigolf díszlet — bálna" loading="lazy">
+          <img class="thumb-img" src="buvar.jpeg"  alt="UV minigolf díszlet — búvár" loading="lazy">
+          <img class="thumb-img" src="capa.jpeg"   alt="UV minigolf díszlet — cápa" loading="lazy">
+          <img class="thumb-img" src="hajo.jpeg"   alt="UV minigolf díszlet — hajó" loading="lazy">
+          <img class="thumb-img" src="teknos.jpeg" alt="UV minigolf díszlet — teknős" loading="lazy">
         </div>
       </div>
     </section>
@@ -625,7 +472,7 @@
     }
   </script>
 
-  <!-- Modálok (nyitás értesítő + auth + profil + lightbox) -->
+  <!-- Modálok + Lightbox -->
   <script>
   (() => {
     function wireModal(rootId, onOpen){
@@ -639,19 +486,15 @@
       return { open, close, el: root };
     }
 
-    // Nyitási értesítő: automatikus megjelenítés
     const opening = wireModal('opening-notice');
     opening && opening.open();
 
-    // Auth modál
     const auth = wireModal('auth-modal');
     document.getElementById('open-auth')?.addEventListener('click', (e)=>{ e.preventDefault(); auth && auth.open(); });
 
-    // Profil modál
     const profile = wireModal('profile-modal');
-    window.__profileModal = profile; // elérhető más scriptekből is
+    window.__profileModal = profile;
 
-    // Auth tabok
     const tabLogin = document.getElementById('tab-login');
     const tabSignup = document.getElementById('tab-signup');
     const panelLogin = document.getElementById('panel-login');
@@ -667,12 +510,9 @@
     tabSignup?.addEventListener('click', ()=>selectTab('signup'));
     selectTab('login');
 
-    // Exponáljuk a close-t más scripteknek
     window.__authModal = auth;
 
-    // -----------------------------
-    // LIGHTBOX: képek nagyítása
-    // -----------------------------
+    // LIGHTBOX
     const lightbox = wireModal('lightbox-modal');
     const lbImg = document.getElementById('lightbox-img');
     const lbCap = document.getElementById('lightbox-cap');
@@ -685,12 +525,10 @@
       lightbox.open();
     }
 
-    // Minden kép, kivéve a fejléc logója
     const imgs = document.querySelectorAll('img:not(.brand-logo)');
     imgs.forEach(img => {
       img.classList.add('lightboxable');
       img.addEventListener('click', (e) => {
-        // ha linkben van a kép, ne navigáljon
         e.preventDefault?.();
         e.stopPropagation?.();
         const full = img.dataset.full || img.currentSrc || img.src;
@@ -698,7 +536,6 @@
       });
     });
 
-    // Esc bezárás
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && lightbox && !lightbox.el.hidden){
         lightbox.close();
@@ -707,7 +544,7 @@
   })();
   </script>
 
-  <!-- FormSubmit AJAX: maradunk az oldalon -->
+  <!-- FormSubmit AJAX -->
   <script>
   (() => {
     const form = document.getElementById('contact-form');
@@ -717,13 +554,12 @@
     function setError(input, msg){ const err = input.nextElementSibling; if (err) err.textContent = msg || ''; }
 
     function validTimeInRange(value){
-      // value formátum: "HH:MM"
       const m = /^(\d{2}):(\d{2})$/.exec(value || '');
       if (!m) return false;
       const hh = Number(m[1]), mm = Number(m[2]);
       if (hh<0 || hh>23 || mm<0 || mm>59) return false;
       const minutes = hh*60 + mm;
-      return minutes >= 10*60 && minutes <= 20*60; // 10:00–20:00 (beleértve)
+      return minutes >= 10*60 && minutes <= 20*60;
     }
 
     function validate(){
@@ -779,7 +615,6 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wYXhqa2VrdGt2Ymt0enN5am1uIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU5NDgyNDIsImV4cCI6MjA3MTUyNDI0Mn0.08MuTnZZoIst55SmRXVKkTrLLjnxBMnHVc5U_pbovUM';
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true } });
 
-    // Fejléc elemek
     const openAuthBtn   = document.getElementById('open-auth');
     const openProfileBtn= document.getElementById('open-profile');
     const logoutBtn     = document.getElementById('logout-btn');
@@ -807,19 +642,16 @@
       }
     }
 
-    // Induláskor: alapállapot, majd session lekérés
     renderUser(null);
     (async () => {
       const { data: { session } } = await supabase.auth.getSession();
       renderUser(session?.user || null);
     })();
 
-    // Auth state változás figyelése
     supabase.auth.onAuthStateChange((_event, session) => {
       renderUser(session?.user || null);
     });
 
-    // Kijelentkezés – közvetlen handler
     logoutBtn?.addEventListener('click', async (e) => {
       e.preventDefault();
       try{
@@ -831,7 +663,6 @@
       }
     });
 
-    // PROFIL – megnyitás és előtöltés
     document.getElementById('open-profile')?.addEventListener('click', async (e) => {
       e.preventDefault();
       const { data: { user } } = await supabase.auth.getUser();
@@ -840,7 +671,6 @@
       window.__profileModal?.open?.();
     });
 
-    // PROFIL – mentés (felhasználónév update user metadata-ben)
     const profileForm   = document.getElementById('profile-form');
     const profileStatus = document.getElementById('profile-status');
     profileForm?.addEventListener('submit', async (e) => {
@@ -856,7 +686,6 @@
         if (error) throw error;
         profileStatus.textContent = 'Mentve ✔';
         profileStatus.hidden = false;
-        // Frissítsük a fejlécet a legújabb adatokkal
         const { data: { user } } = await supabase.auth.getUser();
         renderUser(user || null);
         setTimeout(()=> window.__profileModal?.close?.(), 800);
@@ -866,7 +695,6 @@
       }
     });
 
-    // Bejelentkezés
     const loginForm = document.getElementById('login-form');
     const loginStatus = document.getElementById('login-status');
     loginForm?.addEventListener('submit', async (e) => {
@@ -884,7 +712,6 @@
       }
     });
 
-    // Regisztráció — felhasználónév metaadat + e-mail megerősítés
     const signupForm = document.getElementById('signup-form');
     const signupStatus = document.getElementById('signup-status');
     signupForm?.addEventListener('submit', async (e) => {
@@ -911,11 +738,10 @@
       }
     });
 
-    // E-mail megerősítés kezelése (token_hash + type a queryben)
     (async () => {
       const url = new URL(window.location.href);
       const token_hash = url.searchParams.get('token_hash');
-      const type = url.searchParams.get('type'); // pl. "email"
+      const type = url.searchParams.get('type');
       if (token_hash && type){
         const { error } = await supabase.auth.verifyOtp({ token_hash, type });
         if (!error){
@@ -956,7 +782,7 @@
   }
   </script>
 
-  <!-- Service Worker regisztráció + év a láblécben -->
+  <!-- SW regisztráció + év -->
   <script>
   if ('serviceWorker' in navigator) {
     let refreshing = false;
@@ -973,5 +799,6 @@
   </script>
 </body>
 </html>
+
 
 
