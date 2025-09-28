@@ -1,5 +1,5 @@
-// sw.js — VR & UV Minigolf (network-first HTML + auto-reload)
-const VERSION = "vr-szoba-v8"; // <-- verziót léptettük
+// sw.js — UVR (network-first HTML + auto-reload)
+const VERSION = "vr-szoba-v10"; // bump, hogy az új .jpeg képek is frissüljenek
 const STATIC_CACHE = `static-${VERSION}`;
 const PAGES_CACHE  = `pages-${VERSION}`;
 
@@ -13,16 +13,18 @@ const ASSETS = [
   "/vr-szoba/icon-192.png",
   "/vr-szoba/icon-512.png",
 
-  // VR galéria
+  // VR galéria (a HTML továbbra is ?v=7-et használ)
   "/vr-szoba/szoba-led.jpg",
   "/vr-szoba/szoba-feher.jpg",
   "/vr-szoba/szoba-fa.jpg",
   "/vr-szoba/szoba-neon.jpg",
 
-  // Minigolf galéria
-  "/vr-szoba/golf-1.jpg",
-  "/vr-szoba/golf-2.jpg",
-  "/vr-szoba/golf-3.jpg"
+  // UV Minigolf új képek — .jpeg
+  "/vr-szoba/balna.jpeg",
+  "/vr-szoba/buvar.jpeg",
+  "/vr-szoba/capa.jpeg",
+  "/vr-szoba/hajo.jpeg",
+  "/vr-szoba/teknos.jpeg"
 ];
 
 self.addEventListener("install", (e) => {
@@ -61,6 +63,7 @@ async function networkFirst(req) {
     return caches.match("/vr-szoba/index.html");
   }
 }
+
 async function cacheFirst(cacheName, req) {
   const cached = await caches.match(req);
   if (cached) return cached;
@@ -68,11 +71,11 @@ async function cacheFirst(cacheName, req) {
   (await caches.open(cacheName)).put(req, resp.clone());
   return resp;
 }
+
 async function staleWhileRevalidate(cacheName, req) {
   const cache = await caches.open(cacheName);
   const cached = await cache.match(req);
   const networkPromise = fetch(req).then((resp) => { cache.put(req, resp.clone()); return resp; });
   return cached || networkPromise;
 }
-
 
