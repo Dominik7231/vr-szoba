@@ -220,13 +220,33 @@
     .modal-card{background: color-mix(in srgb, var(--surface), transparent 8%); border:1px solid var(--border); border-radius:1rem; padding:1.25rem; width:min(560px,92%); box-shadow:var(--shadow); position:relative;}
     .modal-title{margin:0 2.2rem .5rem 0; font-size:clamp(1.2rem,2.6vw,1.6rem)}
     .modal-text{color:var(--muted); margin:.25rem 0 0}
-    .modal-close{position:absolute; top:.55rem; right:.55rem; border:1px solid var(--border); background:transparent; color:var(--text); border-radius:.6rem; padding:.3rem .55rem; font:inherit; cursor:pointer;}
-    .tabs{display:flex; gap:.5rem; margin:.25rem 0 1rem}
+    .modal-close{
+  position:absolute;
+  top:.55rem;
+  right:.55rem;
+  border:1px solid var(--border);
+  background:transparent;
+  color:var(--text);
+  border-radius:.6rem;
+  padding:.3rem .55rem;
+  font:inherit;
+  cursor:pointer;
+  z-index:10; /* << EZ AZ ÚJ SOR */
+}
+
     .tabs button{border:1px solid var(--border); background:transparent; color:var(--text); border-radius:.6rem; padding:.45rem .72rem; cursor:pointer; font-weight:700}
     .tabs button[aria-selected="true"]{background:var(--brand); color:#fff; border-color:transparent}
 
     .lightbox-card{ padding:0; background:transparent; border:none; box-shadow:none; width:min(96vw, 1200px); }
-    .lightbox-figure{ margin:0; display:grid; gap:.6rem; justify-items:center; position:relative; }
+    .lightbox-figure{
+  margin:0;
+  display:grid;
+  gap:.6rem;
+  justify-items:center;
+  position:relative;
+  z-index:1; /* hogy az X felette lehessen */
+}
+
     #lightbox-img{ display:block; max-width:100%; max-height:calc(100svh - 6rem); width:auto; height:auto; object-fit:contain; border-radius:.9rem; box-shadow:var(--shadow); background:#0d0f17; }
     #lightbox-cap{ color:var(--muted); text-align:center; padding:0 .75rem; max-width:90ch; }
 
