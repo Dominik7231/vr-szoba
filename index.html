@@ -226,9 +226,19 @@
     .tabs button[aria-selected="true"]{background:var(--brand); color:#fff; border-color:transparent}
 
     .lightbox-card{ padding:0; background:transparent; border:none; box-shadow:none; width:min(96vw, 1200px); }
-    .lightbox-figure{ margin:0; display:grid; gap:.6rem; justify-items:center; }
+    .lightbox-figure{ margin:0; display:grid; gap:.6rem; justify-items:center; position:relative; }
     #lightbox-img{ display:block; max-width:100%; max-height:calc(100svh - 6rem); width:auto; height:auto; object-fit:contain; border-radius:.9rem; box-shadow:var(--shadow); background:#0d0f17; }
     #lightbox-cap{ color:var(--muted); text-align:center; padding:0 .75rem; max-width:90ch; }
+
+    /* Lightbox nyilak */
+    .lightbox-nav{
+      position:absolute; top:50%; transform:translateY(-50%);
+      width:48px; height:48px; display:grid; place-items:center;
+      border:none; border-radius:50%; background:rgba(0,0,0,.45); color:#fff;
+      font-size:1.4rem; cursor:pointer; user-select:none;
+    }
+    .lightbox-prev{ left:8px }
+    .lightbox-next{ right:8px }
 
     /* --- Mobil menü --- */
     @media (max-width: 920px){
@@ -328,6 +338,9 @@
       <figure class="lightbox-figure">
         <img id="lightbox-img" alt="">
         <figcaption id="lightbox-cap" class="modal-text"></figcaption>
+        <!-- navigációs gombok -->
+        <button class="lightbox-nav lightbox-prev" type="button" aria-label="Előző kép">◀</button>
+        <button class="lightbox-nav lightbox-next" type="button" aria-label="Következő kép">▶</button>
       </figure>
     </div>
   </div>
@@ -363,7 +376,7 @@
   </header>
 
   <main id="main">
-    <!-- VR HERO — új elrendezés: szöveg + futurisztikus vizuál -->
+    <!-- VR HERO -->
     <section id="hero-vr" class="hero">
       <div class="container">
         <div class="grid-split">
@@ -372,7 +385,8 @@
             <h1>VR Szoba Kecskeméten — csapatoknak, bulikhoz, élménynek</h1>
             <p>Merülj el a virtuális valóságban csúcsminőségű headsetekkel és többjátékos élményekkel. Ideális baráti programnak, születésnapra, csapatépítésre vagy randihoz.</p>
             <div class="actions" style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem">
-              <a class="btn btn-primary" href="#booking">Foglalok VR időpontot</a>
+              <!-- alap VR-t ajánlunk -->
+              <a class="btn btn-primary" href="#booking" data-package="Alap VR">Foglalok VR időpontot</a>
               <a class="btn btn-ghost" href="#features">Mit tudunk?</a>
             </div>
             <div class="metric" style="margin-top:1rem">
@@ -395,7 +409,7 @@
         </div>
         <p class="muted">Fénylő akadályok, világító labdák és látványos pályák. Tökéletes program családdal, barátokkal vagy csapatépítésre.</p>
         <div class="actions" style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1rem">
-          <a class="btn btn-primary" href="#booking">Foglalok Minigolf pályát</a>
+          <a class="btn btn-primary" href="#booking" data-package="Alap Minigolf">Foglalok Minigolf pályát</a>
           <a class="btn btn-ghost" href="#gallery-golf">Nézd meg a képeket</a>
         </div>
       </div>
@@ -443,7 +457,7 @@
               <li>Stabil többjátékos élmény csapatoknak és partikra.</li>
             </ul>
             <div style="display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.4rem">
-              <a class="btn btn-primary" href="#booking">Lefoglalom a kipróbálást</a>
+              <a class="btn btn-primary" href="#booking" data-package="Alap VR">Lefoglalom a kipróbálást</a>
               <a class="btn btn-ghost" href="#gallery">VR képek</a>
             </div>
           </article>
@@ -485,7 +499,7 @@
             <ul style="margin:0 0 .8rem 1.1rem">
               <li>1 VR állomás</li><li>Játékmester támogatás</li><li>Alap játékválaszték</li>
             </ul>
-            <a class="btn btn-primary" href="#booking">Foglalok</a>
+            <a class="btn btn-primary" href="#booking" data-package="Alap VR">Foglalok</a>
           </article>
           <article class="card" style="position:relative;outline:2px solid var(--brand)">
             <span style="position:absolute;left:50%;transform:translateX(-50%);top:-.8rem;background:var(--brand);color:#fff;border-radius:999px;padding:.15rem .6rem;font-size:.75rem;font-weight:700">Legnépszerűbb</span>
@@ -494,7 +508,7 @@
             <ul style="margin:0 0 .8rem 1.1rem">
               <li>2 VR állomás</li><li>Multiplayer módok</li><li>Fotó/videó készítés</li>
             </ul>
-            <a class="btn btn-primary" href="#booking">Foglalok</a>
+            <a class="btn btn-primary" href="#booking" data-package="Csapat VR">Foglalok</a>
           </article>
         </div>
 
@@ -506,7 +520,7 @@
             <ul style="margin:0 0 .8rem 1.1rem">
               <li>Neonos pálya</li><li>Világító labdák</li><li>Alap pontlap</li>
             </ul>
-            <a class="btn btn-primary" href="#booking">Foglalok</a>
+            <a class="btn btn-primary" href="#booking" data-package="Alap Minigolf">Foglalok</a>
           </article>
           <article class="card">
             <h4>Csapat Minigolf</h4>
@@ -514,7 +528,7 @@
             <ul style="margin:0 0 .8rem 1.1rem">
               <li>Max 12 fő</li><li>Bajnokság pontozólappal</li><li>Fotózás</li>
             </ul>
-            <a class="btn btn-primary" href="#booking">Időpontot kérek</a>
+            <a class="btn btn-primary" href="#booking" data-package="Csapat Minigolf">Időpontot kérek</a>
           </article>
         </div>
       </div>
@@ -740,7 +754,7 @@
     }
   </script>
 
-  <!-- Modálok + Lightbox -->
+  <!-- Modálok + Lightbox + Galéria lapozás + Csomag auto-kitöltés -->
   <script>
   (() => {
     function wireModal(rootId, onOpen){
@@ -780,34 +794,59 @@
 
     window.__authModal = auth;
 
-    // LIGHTBOX
+    /* -------- LIGHTBOX + GALÉRIA LAPOZÁS -------- */
     const lightbox = wireModal('lightbox-modal');
     const lbImg = document.getElementById('lightbox-img');
     const lbCap = document.getElementById('lightbox-cap');
+    const prevBtn = document.querySelector('.lightbox-prev');
+    const nextBtn = document.querySelector('.lightbox-next');
 
-    function openLightbox(src, altText){
-      if (!lightbox) return;
+    // csak a két galéria képei
+    const galleryImgs = Array.from(document.querySelectorAll('#gallery img.thumb-img, #gallery-golf img.thumb-img'));
+
+    let currentIndex = -1;
+
+    function openAt(i){
+      if (!lightbox || i < 0 || i >= galleryImgs.length) return;
+      currentIndex = i;
+      const img = galleryImgs[i];
+      const src = img.dataset.full || img.currentSrc || img.src;
       lbImg.src = src;
-      lbImg.alt = altText || '';
-      lbCap.textContent = altText || '';
+      lbImg.alt = img.alt || '';
+      lbCap.textContent = img.alt || '';
       lightbox.open();
     }
+    function next(){ openAt((currentIndex + 1) % galleryImgs.length); }
+    function prev(){ openAt((currentIndex - 1 + galleryImgs.length) % galleryImgs.length); }
 
-    const imgs = document.querySelectorAll('img:not(.brand-logo)');
-    imgs.forEach(img => {
+    galleryImgs.forEach((img, i) => {
       img.classList.add('lightboxable');
-      img.addEventListener('click', (e) => {
-        e.preventDefault?.();
-        e.stopPropagation?.();
-        const full = img.dataset.full || img.currentSrc || img.src;
-        openLightbox(full, img.alt || '');
-      });
+      img.addEventListener('click', (e) => { e.preventDefault?.(); e.stopPropagation?.(); openAt(i); });
     });
 
+    prevBtn?.addEventListener('click', prev);
+    nextBtn?.addEventListener('click', next);
+
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && lightbox && !lightbox.el.hidden){
-        lightbox.close();
-      }
+      if (!lightbox || lightbox.el.hidden) return;
+      if (e.key === 'Escape') lightbox.close();
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+
+    /* -------- CSOMAG AUTO-KITÖLTÉS -------- */
+    const bookingSelect = document.getElementById('package');
+    const bookingHashLinks = document.querySelectorAll('a[href="#booking"][data-package]');
+    bookingHashLinks.forEach(a => {
+      a.addEventListener('click', () => {
+        const pkg = a.dataset.package;
+        if (pkg && bookingSelect){
+          bookingSelect.value = pkg;
+          // ha van hibaszöveg, töröljük
+          const err = bookingSelect.nextElementSibling;
+          if (err && err.classList.contains('error')) err.textContent = '';
+        }
+      });
     });
   })();
   </script>
